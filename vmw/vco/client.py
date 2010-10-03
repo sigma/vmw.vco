@@ -2,21 +2,13 @@ import time
 
 import generated.VSOWebControlService_client_sync as sync_client
 import generated.VSOWebControlService_client_async as async_client
-#from generated.VSOWebControlService_types import *
 
 from types import WorkflowTokenAttribute as _WorkflowTokenAttribute, Workflow as _Workflow
 from vmw.ZSI import EvaluateException
+from interfaces import ITypedValue
 
 from twisted.internet.defer import Deferred
 from twisted.internet import task, reactor
-
-class TypeWrapper(object):
-    """
-    Base class for type wrappers
-    """
-    def __init__(self, typ, val):
-        self.type = typ
-        self.value = str(val)
 
 class Client(object):
     """
@@ -125,9 +117,9 @@ class Client(object):
         for k in inputs.keys():
             i = _WorkflowTokenAttribute()
             i._name = k
-            wrap = self._typeWrapper(inputs[k])
-            i._type = wrap.type
-            i._value = wrap.value
+            wrap = ITypedValue(inputs[k])
+            i._type = wrap.type()
+            i._value = wrap.value()
             real_inputs.append(i)
         return real_inputs
 
@@ -215,13 +207,13 @@ class Client(object):
     def _findTrans(self, res):
         if res._elements is None:
             return []
-        return [FinderResult(r) for r in res._elements._item]
+        return [FinderResult(self, r) for r in res._elements._item]
 
     def _findForIdTrans(self, res):
-        return FinderResult(res)
+        return FinderResult(self, res)
 
     def _findRelationTrans(self, res):
-        return [FinderResult(r) for r in res]
+        return [FinderResult(self, r) for r in res]
 
     def _hasChildrenInRelationTrans(self, res):
         return (res > 0)
@@ -265,40 +257,41 @@ class Client(object):
         # add the method to this object
         setattr(self, "_" + name, _func)
 
-    def _typeWrapper(self, value):
-        if isinstance(value, TypeWrapper):
-            return value
-        else:
-            # try to wrap builtin types
-            assoc = {str: "string", int: "number", bool: "boolean"}
-            for t in assoc.keys():
-                if type(value) is t:
-                    return TypeWrapper(assoc[t], value)
-            raise Exception("Unable to wrap type %s" % (type(value)))
-
 class Plugin(object):
     def __init__(self, server, holder):
+        self._server = server
+        self._holder = holder
+
         self.name = holder._moduleName
         self.description = holder._moduleDescription
         self._repr = holder._moduleDisplayName
         self.version = holder._moduleVersion
 
-        self._server = server
-
     def __repr__(self):
         return self._repr
 
+class WorkflowAttribute(object):
+    def __init__(self, server, holder):
+        self._server = server
+        self._holder = holder
+
+        self.name = holder._name
+        self.type = holder._type
+
 class Workflow(object):
     def __init__(self, server, holder):
+        self._server = server
+        self._holder = holder
+
         self.id = holder._id
         self.name = holder._name
         self.description = holder._description
-        self.inParameters = holder._inParameters
-        self.outParameters = holder._outParameters
-        self.attributes = holder._attributes
+        self.inParameters = self.__convertAttributes(holder._inParameters)
+        self.outParameters = self.__convertAttributes(holder._outParameters)
+        self.attributes = self.__convertAttributes(holder._attributes)
 
-        self._server = server
-        self._holder = holder
+    def __convertAttributes(self, attrs):
+        return [WorkflowAttribute(self._server, it) for it in attrs._item]
 
     def execute(self, inputs={}):
         return self._server.executeWorkflow(self, inputs)
@@ -313,6 +306,9 @@ class WorkflowToken(object):
     FAILED         = 5
 
     def __init__(self, server, holder):
+        self._server = server
+        self._holder = holder
+
         self.id = holder._id
         self.title = holder._title
         self.workflowId = holder._workflowId
@@ -322,8 +318,6 @@ class WorkflowToken(object):
         self.startDate = holder._startDate
         self.endDate = holder._endDate
         self.xmlContent = holder._xmlContent
-
-        self._server = server
 
     def cancel(self):
         return self._server.cancelWorkflow(self)
@@ -389,12 +383,12 @@ class WorkflowToken(object):
 
 class WorkflowTokenAttribute(object):
     def __init__(self, server, holder):
+        self._server = server
+        self._holder = holder
+
         self.name = holder._name
         self.type = holder._type
         self.value = holder._value
-
-        self._server = server
-        self._holder = holder
 
     def __repr__(self):
         return "<[%s:%s] %s>" % (self.name, self.type, self.value)
@@ -405,13 +399,14 @@ class Rights(object):
     EXECUTE = ord('x')
 
 class FinderResult(object):
-    def __init__(self, holder):
+    def __init__(self, server, holder):
+        self._server = server
+        self._holder = holder
+
         self.type = holder._type
         self.id = holder._id
         self.uri = holder._dunesUri
         self.properties = self.__readProperties(holder._properties)
-
-        self._holder = holder
 
     def __readProperties(self, props):
         res = {}
