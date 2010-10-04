@@ -130,8 +130,8 @@ class Client(object):
     def simpleExecuteWorkflow(self, wf, encoded_input):
         return self._simpleExecuteWorkflow(in0=wf.id, in3=encoded_input)
 
-    def getWorkflowTokenForId(self, token):
-        return self._getWorkflowTokenForId(workflowTokenId=token.id)
+    def getWorkflowTokenForId(self, token_id):
+        return self._getWorkflowTokenForId(workflowTokenId=token_id)
 
     def getWorkflowTokenResult(self, token):
         return self._getWorkflowTokenResult(workflowTokenId=token.id)
