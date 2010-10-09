@@ -1,0 +1,499 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>vmw.vco.client &mdash; PyvCO v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyvCO v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../../index.html">PyvCO v0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for vmw.vco.client</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">generated.VSOWebControlService_client_sync</span> <span class="kn">as</span> <span class="nn">sync_client</span>
+<span class="kn">import</span> <span class="nn">generated.VSOWebControlService_client_async</span> <span class="kn">as</span> <span class="nn">async_client</span>
+
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">WorkflowTokenAttribute</span> <span class="k">as</span> <span class="n">_WorkflowTokenAttribute</span><span class="p">,</span> <span class="n">Workflow</span> <span class="k">as</span> <span class="n">_Workflow</span>
+<span class="kn">from</span> <span class="nn">vmw.ZSI</span> <span class="kn">import</span> <span class="n">EvaluateException</span>
+<span class="kn">from</span> <span class="nn">interfaces</span> <span class="kn">import</span> <span class="n">ITypedValue</span>
+
+<span class="kn">from</span> <span class="nn">twisted.internet.defer</span> <span class="kn">import</span> <span class="n">Deferred</span>
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">task</span><span class="p">,</span> <span class="n">reactor</span>
+
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of a vCO webservice client.</span>
+<span class="sd">    Calls implemented: 100%</span>
+
+<span class="sd">    - echo</span>
+<span class="sd">    - echoWorkflow</span>
+<span class="sd">    - answerWorkflowInput</span>
+<span class="sd">    - cancelWorkflow</span>
+<span class="sd">    - executeWorkflow</span>
+<span class="sd">    - find</span>
+<span class="sd">    - findForId</span>
+<span class="sd">    - findRelation</span>
+<span class="sd">    - hasChildrenInRelation</span>
+<span class="sd">    - getAllPlugins</span>
+<span class="sd">    - getAllWorkflows</span>
+<span class="sd">    - getWorkflowForId</span>
+<span class="sd">    - getWorkflowsWithName</span>
+<span class="sd">    - getWorkflowTokenForId</span>
+<span class="sd">    - getWorkflowTokenResult</span>
+<span class="sd">    - getWorkflowTokenStatus</span>
+<span class="sd">    - simpleExecuteWorkflow</span>
+<span class="sd">    - hasRights</span>
+<span class="sd">    - sendCustomEvent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># see https://wiki.eng.vmware.com/BFG:JiDine/LDAPSetups for default</span>
+    <span class="c"># credentials</span>
+<div class="viewcode-block" id="Client.__init__"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8280/vmware-vmo-webcontrol/webservice&quot;</span><span class="p">,</span>
+                 <span class="n">username</span> <span class="o">=</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+                 <span class="n">password</span> <span class="o">=</span> <span class="s">&quot;admin&quot;</span><span class="p">,</span>
+                 <span class="n">async</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span>
+
+        <span class="k">if</span> <span class="n">async</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mod</span> <span class="o">=</span> <span class="n">async_client</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">async_client</span><span class="o">.</span><span class="n">VSOWebControlServiceLocator</span><span class="p">()</span><span class="o">.</span><span class="n">getwebservice</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">binding</span><span class="o">.</span><span class="n">defer</span> <span class="o">=</span> <span class="n">async</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mod</span> <span class="o">=</span> <span class="n">sync_client</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">sync_client</span><span class="o">.</span><span class="n">VSOWebControlServiceLocator</span><span class="p">()</span><span class="o">.</span><span class="n">getwebservice</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;getAllWorkflows&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowsTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;getWorkflowForId&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;getWorkflowsWithName&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowsTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;executeWorkflow&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_executeWorkflowTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;simpleExecuteWorkflow&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_executeWorkflowTrans</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;in1&#39;</span><span class="p">,</span> <span class="s">&#39;in2&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;answerWorkflowInput&quot;</span><span class="p">,</span>
+                               <span class="bp">None</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;cancelWorkflow&quot;</span><span class="p">,</span>
+                               <span class="bp">None</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;getWorkflowTokenForId&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenForIdTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;getWorkflowTokenResult&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenResultTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;getWorkflowTokenStatus&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenStatusTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;getAllPlugins&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_getAllPluginsTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;hasRights&quot;</span><span class="p">,</span>
+                               <span class="bp">None</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;sendCustomEvent&quot;</span><span class="p">,</span>
+                               <span class="bp">None</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;find&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_findTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;findForId&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_findForIdTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;findRelation&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_findRelationTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;hasChildrenInRelation&quot;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_hasChildrenInRelationTrans</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;echoWorkflow&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTrans</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateAccessor</span><span class="p">(</span><span class="s">&quot;echo&quot;</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_isAsynchronous</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mod</span> <span class="ow">is</span> <span class="n">async_client</span>
+
+<div class="viewcode-block" id="Client.getAllWorkflows"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getAllWorkflows">[docs]</a>    <span class="k">def</span> <span class="nf">getAllWorkflows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAllWorkflows</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Client.getAllPlugins"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getAllPlugins">[docs]</a>    <span class="k">def</span> <span class="nf">getAllPlugins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAllPlugins</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Client.getWorkflowForId"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowForId">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowForId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowForId</span><span class="p">(</span><span class="n">workflowId</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.getWorkflowsWithName"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowsWithName">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowsWithName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowsWithName</span><span class="p">(</span><span class="n">workflowName</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.cancelWorkflow"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.cancelWorkflow">[docs]</a>    <span class="k">def</span> <span class="nf">cancelWorkflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancelWorkflow</span><span class="p">(</span><span class="n">workflowTokenId</span><span class="o">=</span><span class="n">token</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__readInputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="n">real_inputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">_WorkflowTokenAttribute</span><span class="p">()</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="n">wrap</span> <span class="o">=</span> <span class="n">ITypedValue</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">wrap</span><span class="o">.</span><span class="n">type</span><span class="p">()</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">wrap</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="n">real_inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">real_inputs</span>
+
+<div class="viewcode-block" id="Client.executeWorkflow"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.executeWorkflow">[docs]</a>    <span class="k">def</span> <span class="nf">executeWorkflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_executeWorkflow</span><span class="p">(</span><span class="n">workflowId</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                     <span class="n">workflowInputs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__readInputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Client.simpleExecuteWorkflow"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.simpleExecuteWorkflow">[docs]</a>    <span class="k">def</span> <span class="nf">simpleExecuteWorkflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">encoded_input</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simpleExecuteWorkflow</span><span class="p">(</span><span class="n">in0</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">in3</span><span class="o">=</span><span class="n">encoded_input</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.getWorkflowTokenForId"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowTokenForId">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowTokenForId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenForId</span><span class="p">(</span><span class="n">workflowTokenId</span><span class="o">=</span><span class="n">token_id</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.getWorkflowTokenResult"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowTokenResult">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowTokenResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenResult</span><span class="p">(</span><span class="n">workflowTokenId</span><span class="o">=</span><span class="n">token</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.getWorkflowTokenStatus"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowTokenStatus">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowTokenStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenStatus</span><span class="p">(</span><span class="n">workflowTokenIds</span><span class="o">=</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="Client.answerWorkflowInput"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.answerWorkflowInput">[docs]</a>    <span class="k">def</span> <span class="nf">answerWorkflowInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_answerWorkflowInput</span><span class="p">(</span><span class="n">workflowTokenId</span><span class="o">=</span><span class="n">token</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                         <span class="n">answerInputs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__readInputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Client.hasRights"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.hasRights">[docs]</a>    <span class="k">def</span> <span class="nf">hasRights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hasRights</span><span class="p">(</span><span class="n">taskId</span><span class="o">=</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.sendCustomEvent"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.sendCustomEvent">[docs]</a>    <span class="k">def</span> <span class="nf">sendCustomEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+                           <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sendCustomEvent</span><span class="p">(</span><span class="n">eventName</span><span class="o">=</span><span class="n">event</span><span class="p">,</span> <span class="n">serializedProperties</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.find"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.findForId"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.findForId">[docs]</a>    <span class="k">def</span> <span class="nf">findForId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findForId</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">EvaluateException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="Client.findRelation"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.findRelation">[docs]</a>    <span class="k">def</span> <span class="nf">findRelation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">relation</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findRelation</span><span class="p">(</span><span class="n">parentType</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span> <span class="n">parentId</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+                                      <span class="n">relationName</span><span class="o">=</span><span class="n">relation</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">EvaluateException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="Client.hasChildrenInRelation"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.hasChildrenInRelation">[docs]</a>    <span class="k">def</span> <span class="nf">hasChildrenInRelation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">relation</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hasChildrenInRelation</span><span class="p">(</span><span class="n">parentType</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span> <span class="n">parentId</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+                                           <span class="n">relationName</span><span class="o">=</span><span class="n">relation</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.echo"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.echo">[docs]</a>    <span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_echo</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Client.echoWorkflow"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.echoWorkflow">[docs]</a>    <span class="k">def</span> <span class="nf">echoWorkflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wf</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_echoWorkflow</span><span class="p">(</span><span class="n">workflowMessage</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">_holder</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_getAllPluginsTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_getWorkflowTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_getWorkflowsTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_executeWorkflowTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WorkflowToken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_getWorkflowTokenForIdTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WorkflowToken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_getWorkflowTokenResultTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">WorkflowTokenAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_getWorkflowTokenStatusTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="n">translate</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;running&quot;</span><span class="p">:</span> <span class="n">WorkflowToken</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">,</span>
+                     <span class="s">&quot;waiting&quot;</span><span class="p">:</span> <span class="n">WorkflowToken</span><span class="o">.</span><span class="n">WAITING</span><span class="p">,</span>
+                     <span class="s">&quot;waiting-signal&quot;</span><span class="p">:</span> <span class="n">WorkflowToken</span><span class="o">.</span><span class="n">WAITING_SIGNAL</span><span class="p">,</span>
+                     <span class="s">&quot;canceled&quot;</span><span class="p">:</span> <span class="n">WorkflowToken</span><span class="o">.</span><span class="n">CANCELLED</span><span class="p">,</span>
+                     <span class="s">&quot;completed&quot;</span><span class="p">:</span> <span class="n">WorkflowToken</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span>
+                     <span class="s">&quot;failed&quot;</span><span class="p">:</span> <span class="n">WorkflowToken</span><span class="o">.</span><span class="n">FAILED</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">translate</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_findTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">_elements</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">FinderResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">_elements</span><span class="o">.</span><span class="n">_item</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_findForIdTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FinderResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_findRelationTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">FinderResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_hasChildrenInRelationTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c"># magic method for generating method calling generated stuff</span>
+    <span class="k">def</span> <span class="nf">_generateAccessor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">trans</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="c"># compute class of correct request type</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&quot;self._mod.&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&quot;Request&quot;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_func</span><span class="p">(</span><span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="n">cls</span><span class="p">()</span>
+            <span class="c"># authenticated methods need username/password</span>
+            <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+                    <span class="n">req</span><span class="o">.</span><span class="n">_username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_username</span>
+                    <span class="n">req</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c"># some broken calls have cryptic names instead...</span>
+                    <span class="n">user_field</span><span class="p">,</span> <span class="n">pwd_field</span> <span class="o">=</span> <span class="n">auth</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">user_field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_username</span><span class="p">)</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">pwd_field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">)</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">keywords</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="c"># build the request object with all specified components</span>
+            <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">kw</span><span class="p">,</span> <span class="n">keywords</span><span class="p">[</span><span class="n">kw</span><span class="p">])</span>
+
+            <span class="c"># call the generated method, and get response</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span><span class="n">req</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">__extractRes</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">trans</span><span class="p">):</span>
+                <span class="c"># extract relevant value from response object</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&quot;Return&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="c"># optionally transform result</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">trans</span> <span class="ow">and</span> <span class="n">trans</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="ow">or</span> <span class="n">res</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">Deferred</span><span class="p">):</span>
+                <span class="n">resp</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="n">__extractRes</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">resp</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">__extractRes</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span>
+
+        <span class="c"># add the method to this object</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">_func</span><span class="p">)</span>
+</div>
+<span class="k">class</span> <span class="nc">Plugin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span> <span class="o">=</span> <span class="n">holder</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_moduleName</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_moduleDescription</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_moduleDisplayName</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_moduleVersion</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span>
+
+<span class="k">class</span> <span class="nc">WorkflowAttribute</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span> <span class="o">=</span> <span class="n">holder</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_type</span>
+
+<span class="k">class</span> <span class="nc">Workflow</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span> <span class="o">=</span> <span class="n">holder</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inParameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__convertAttributes</span><span class="p">(</span><span class="n">holder</span><span class="o">.</span><span class="n">_inParameters</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outParameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__convertAttributes</span><span class="p">(</span><span class="n">holder</span><span class="o">.</span><span class="n">_outParameters</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__convertAttributes</span><span class="p">(</span><span class="n">holder</span><span class="o">.</span><span class="n">_attributes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__convertAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">WorkflowAttribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">_item</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">executeWorkflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">WorkflowToken</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c"># order matters (see method isFinished())</span>
+    <span class="n">RUNNING</span>        <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">WAITING</span>        <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">WAITING_SIGNAL</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">CANCELLED</span>      <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">COMPLETED</span>      <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">FAILED</span>         <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span> <span class="o">=</span> <span class="n">holder</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">workflowId</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_workflowId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentItemName</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_currentItemName</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentItemState</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_currentItemState</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">globalState</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_globalState</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startDate</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_startDate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endDate</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_endDate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmlContent</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_xmlContent</span>
+
+    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">cancelWorkflow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getResult</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">getWorkflowTokenResult</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">_isAsynchronous</span><span class="p">():</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">getWorkflowTokenStatus</span><span class="p">([</span><span class="bp">self</span><span class="p">])</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">st</span><span class="p">:</span> <span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">d</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">getWorkflowTokenStatus</span><span class="p">([</span><span class="bp">self</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">isFinished</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">_isAsynchronous</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStatus</span><span class="p">()</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">st</span><span class="p">:</span> <span class="n">st</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CANCELLED</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStatus</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CANCELLED</span>
+
+    <span class="k">def</span> <span class="nf">isWaiting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">waiting_states</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">WAITING</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">WAITING_SIGNAL</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">_isAsynchronous</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStatus</span><span class="p">()</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">st</span><span class="p">:</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">waiting_states</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStatus</span><span class="p">()</span> <span class="ow">in</span> <span class="n">waiting_states</span>
+
+    <span class="k">def</span> <span class="nf">__wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">poll</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">_async</span> <span class="o">=</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+        <span class="k">def</span> <span class="nf">__checkPred</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">:</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">res</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">task</span><span class="o">.</span><span class="n">deferLater</span><span class="p">(</span><span class="n">reactor</span><span class="p">,</span> <span class="n">poll</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__wait</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">poll</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">_async</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pred</span><span class="p">()</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="n">__checkPred</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">pred</span><span class="p">():</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">poll</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">waitResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poll</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">_isAsynchronous</span><span class="p">():</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">Deferred</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isFinished</span><span class="p">,</span> <span class="n">poll</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResult</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isFinished</span><span class="p">,</span> <span class="n">poll</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResult</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">waitQuestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poll</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">_isAsynchronous</span><span class="p">():</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">Deferred</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isFinished</span><span class="p">,</span> <span class="n">poll</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isFinished</span><span class="p">,</span> <span class="n">poll</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">answerWorkflowInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">WorkflowTokenAttribute</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span> <span class="o">=</span> <span class="n">holder</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_value</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;&lt;[</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">] </span><span class="si">%s</span><span class="s">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Rights</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">READ</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">WRITE</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+    <span class="n">EXECUTE</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">FinderResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span> <span class="o">=</span> <span class="n">holder</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_dunesUri</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__readProperties</span><span class="p">(</span><span class="n">holder</span><span class="o">.</span><span class="n">_properties</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__readProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">_item</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">_value</span>
+        <span class="k">return</span> <span class="n">res</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../../index.html">PyvCO v0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, VMware Inc., Yann Hodique.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to PyvCO’s documentation! &mdash; PyvCO v0.1 documentation</title>
+    <title>Introduction &mdash; PyvCO v0.1 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -21,8 +21,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyvCO v0.1 documentation" href="#" />
-    <link rel="next" title="Introduction" href="intro.html" /> 
+    <link rel="top" title="PyvCO v0.1 documentation" href="index.html" />
+    <link rel="next" title="Communicate with a KL or KL.next vCO" href="soap.html" />
+    <link rel="prev" title="Welcome to PyvCO’s documentation!" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -32,9 +33,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="intro.html" title="Introduction"
+          <a href="soap.html" title="Communicate with a KL or KL.next vCO"
              accesskey="N">next</a> |</li>
-        <li><a href="#">PyvCO v0.1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="index.html" title="Welcome to PyvCO’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyvCO v0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -43,32 +47,26 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-pyvco-s-documentation">
-<h1>Welcome to PyvCO&#8217;s documentation!<a class="headerlink" href="#welcome-to-pyvco-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#installation">Installation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="soap.html">Communicate with a KL or KL.next vCO</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="soap.html#soap-interface">SOAP interface</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">SOAP client usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#check-the-server-connection">Check the server connection</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>This Python module aims at providing a complete control layer over vCO&#8217;s
+public interface.</p>
+<p>This includes vCO WebService.</p>
+<p>By using this module, one can (hopefully) obtain reasonable integration of vCO
+in a Python environment, as well as a useful testing environment.</p>
+<p>The use cases covered by PyvCO and this documentation are:</p>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li>Communicate with a KL.next vCO using the <a class="reference internal" href="soap.html"><em>SOAP interface</em></a>.</li>
+<li>Write tests targetting vCO.</li>
+<li>Provide enough information to extend PyvCO in such a way that the above use
+cases remain consistent.</li>
 </ul>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>PyvCO is best installed using official package:</p>
+<div class="highlight-python"><pre>$ pip install pyvco</pre>
+</div>
+<p>This will fetch PyvCO and its dependencies from <a class="reference external" href="http://pypi.python.org">Pypi</a></p>
 </div>
 </div>
 
@@ -78,20 +76,23 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to PyvCO&#8217;s documentation!</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to PyvCO&#8217;s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="intro.html"
-                        title="next chapter">Introduction</a></p>
+  <p class="topless"><a href="soap.html"
+                        title="next chapter">Communicate with a KL or KL.next vCO</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
+    <li><a href="_sources/intro.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -118,9 +119,12 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="intro.html" title="Introduction"
+          <a href="soap.html" title="Communicate with a KL or KL.next vCO"
              >next</a> |</li>
-        <li><a href="#">PyvCO v0.1 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="index.html" title="Welcome to PyvCO’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">PyvCO v0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

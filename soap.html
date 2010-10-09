@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Communicate with a KL or KL.next vCO &mdash; PyvCO v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyvCO v0.1 documentation" href="index.html" />
+    <link rel="next" title="SOAP client usage" href="examples.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="SOAP client usage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyvCO v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="communicate-with-a-kl-or-kl-next-vco">
+<h1>Communicate with a KL or KL.next vCO<a class="headerlink" href="#communicate-with-a-kl-or-kl-next-vco" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="soap-interface">
+<h2>SOAP interface<a class="headerlink" href="#soap-interface" title="Permalink to this headline">¶</a></h2>
+<p>The main entry point is:</p>
+<dl class="class">
+<dt id="vmw.vco.client.Client">
+<em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">Client</tt><a class="reference internal" href="_modules/vmw/vco/client.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of a vCO webservice client.
+Calls implemented: 100%</p>
+<ul class="simple">
+<li>echo</li>
+<li>echoWorkflow</li>
+<li>answerWorkflowInput</li>
+<li>cancelWorkflow</li>
+<li>executeWorkflow</li>
+<li>find</li>
+<li>findForId</li>
+<li>findRelation</li>
+<li>hasChildrenInRelation</li>
+<li>getAllPlugins</li>
+<li>getAllWorkflows</li>
+<li>getWorkflowForId</li>
+<li>getWorkflowsWithName</li>
+<li>getWorkflowTokenForId</li>
+<li>getWorkflowTokenResult</li>
+<li>getWorkflowTokenStatus</li>
+<li>simpleExecuteWorkflow</li>
+<li>hasRights</li>
+<li>sendCustomEvent</li>
+</ul>
+<dl class="method">
+<dt id="vmw.vco.client.Client.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>url</em>, <em>username</em>, <em>password</em>, <em>async=False</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.answerWorkflowInput">
+<tt class="descname">answerWorkflowInput</tt><big>(</big><em>token</em>, <em>inputs={}</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.answerWorkflowInput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.answerWorkflowInput" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.cancelWorkflow">
+<tt class="descname">cancelWorkflow</tt><big>(</big><em>token</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.cancelWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.cancelWorkflow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.echo">
+<tt class="descname">echo</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.echo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.echo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.echoWorkflow">
+<tt class="descname">echoWorkflow</tt><big>(</big><em>wf</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.echoWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.echoWorkflow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.executeWorkflow">
+<tt class="descname">executeWorkflow</tt><big>(</big><em>wf</em>, <em>inputs={}</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.executeWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.executeWorkflow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.find">
+<tt class="descname">find</tt><big>(</big><em>type</em>, <em>query=''</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.find" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.findForId">
+<tt class="descname">findForId</tt><big>(</big><em>type</em>, <em>id</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.findForId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.findForId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.findRelation">
+<tt class="descname">findRelation</tt><big>(</big><em>type</em>, <em>id</em>, <em>relation</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.findRelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.findRelation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.getAllPlugins">
+<tt class="descname">getAllPlugins</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getAllPlugins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getAllPlugins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.getAllWorkflows">
+<tt class="descname">getAllWorkflows</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getAllWorkflows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getAllWorkflows" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.getWorkflowForId">
+<tt class="descname">getWorkflowForId</tt><big>(</big><em>id</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowForId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowForId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.getWorkflowTokenForId">
+<tt class="descname">getWorkflowTokenForId</tt><big>(</big><em>token_id</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowTokenForId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowTokenForId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.getWorkflowTokenResult">
+<tt class="descname">getWorkflowTokenResult</tt><big>(</big><em>token</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowTokenResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowTokenResult" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.getWorkflowTokenStatus">
+<tt class="descname">getWorkflowTokenStatus</tt><big>(</big><em>tokens</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowTokenStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowTokenStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.getWorkflowsWithName">
+<tt class="descname">getWorkflowsWithName</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowsWithName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowsWithName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.hasChildrenInRelation">
+<tt class="descname">hasChildrenInRelation</tt><big>(</big><em>type</em>, <em>id</em>, <em>relation</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.hasChildrenInRelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.hasChildrenInRelation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.hasRights">
+<tt class="descname">hasRights</tt><big>(</big><em>task</em>, <em>right</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.hasRights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.hasRights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.sendCustomEvent">
+<tt class="descname">sendCustomEvent</tt><big>(</big><em>event</em>, <em>props</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.sendCustomEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.sendCustomEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Client.simpleExecuteWorkflow">
+<tt class="descname">simpleExecuteWorkflow</tt><big>(</big><em>wf</em>, <em>encoded_input</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.simpleExecuteWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.simpleExecuteWorkflow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Communicate with a KL or KL.next vCO</a><ul>
+<li><a class="reference internal" href="#soap-interface">SOAP interface</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">SOAP client usage</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/soap.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="SOAP client usage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             >previous</a> |</li>
+        <li><a href="index.html">PyvCO v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, VMware Inc., Yann Hodique.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>
