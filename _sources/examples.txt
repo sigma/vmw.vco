@@ -43,12 +43,21 @@ Now let's see what workflows are available in that vCO server::
   Dummy workflow
   Waiting workflow
 
+Sanity-check the client
+=======================
+
+Similar to the ``echo`` command, there is an ``echoWorkflow`` one, that
+requires the client to provide some well-formatted workflow object::
+
+  >>> wf = wfs[0]
+
+  >>> print c.echoWorkflow(wf)
+  <vmw.vco.client.Workflow object at 0x36d2650>
+
 Run a workflow
 ==============
 
 Select a workflow, discover the inputs it requires, and run it::
-
-  >>> wf = wfs[0]
 
   >>> for i in wf.inParameters:
   ...     print "%s: %s" % (i.name, i.type)
@@ -69,3 +78,30 @@ Wait for workflow completion, and retrieve output::
 
   >>> run.waitResult()
   [<[out:string] foo>]
+
+Cancel a workflow
+=================
+
+If some workflow has been run by mistake, you can always cancel it. That will
+not undo what's already done, but will attempt to prevent from going further::
+
+  >>> run = wf.execute(inputs)
+
+  >>> run.cancel()
+
+Answer a workflow interaction
+=============================
+
+Some workflows require additional inputs in the middle of their execution,
+requiring more interactions::
+
+  >>> wf = wfs[1]
+
+  >>> run = wf.execute()
+
+  >>> run.waitQuestion()
+
+  >>> run.answer({'answer': 42})
+
+  >>> run.waitResult()
+  []

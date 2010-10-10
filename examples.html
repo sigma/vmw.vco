@@ -82,12 +82,21 @@ the <tt class="docutils literal"><span class="pre">echo</span></tt>  test method
 </pre></div>
 </div>
 </div>
+<div class="section" id="sanity-check-the-client">
+<h2>Sanity-check the client<a class="headerlink" href="#sanity-check-the-client" title="Permalink to this headline">¶</a></h2>
+<p>Similar to the <tt class="docutils literal"><span class="pre">echo</span></tt> command, there is an <tt class="docutils literal"><span class="pre">echoWorkflow</span></tt> one, that
+requires the client to provide some well-formatted workflow object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wf</span> <span class="o">=</span> <span class="n">wfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span><span class="o">.</span><span class="n">echoWorkflow</span><span class="p">(</span><span class="n">wf</span><span class="p">)</span>
+<span class="go">&lt;vmw.vco.client.Workflow object at 0x36d2650&gt;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="run-a-workflow">
 <h2>Run a workflow<a class="headerlink" href="#run-a-workflow" title="Permalink to this headline">¶</a></h2>
 <p>Select a workflow, discover the inputs it requires, and run it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wf</span> <span class="o">=</span> <span class="n">wfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">wf</span><span class="o">.</span><span class="n">inParameters</span><span class="p">:</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">wf</span><span class="o">.</span><span class="n">inParameters</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">in: string</span>
@@ -109,6 +118,33 @@ the <tt class="docutils literal"><span class="pre">echo</span></tt>  test method
 </pre></div>
 </div>
 </div>
+<div class="section" id="cancel-a-workflow">
+<h2>Cancel a workflow<a class="headerlink" href="#cancel-a-workflow" title="Permalink to this headline">¶</a></h2>
+<p>If some workflow has been run by mistake, you can always cancel it. That will
+not undo what&#8217;s already done, but will attempt to prevent from going further:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="answer-a-workflow-interaction">
+<h2>Answer a workflow interaction<a class="headerlink" href="#answer-a-workflow-interaction" title="Permalink to this headline">¶</a></h2>
+<p>Some workflows require additional inputs in the middle of their execution,
+requiring more interactions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wf</span> <span class="o">=</span> <span class="n">wfs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">waitQuestion</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">answer</span><span class="p">({</span><span class="s">&#39;answer&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">waitResult</span><span class="p">()</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -122,8 +158,11 @@ the <tt class="docutils literal"><span class="pre">echo</span></tt>  test method
 <li><a class="reference internal" href="#">SOAP client usage</a><ul>
 <li><a class="reference internal" href="#check-the-server-connection">Check the server connection</a></li>
 <li><a class="reference internal" href="#get-list-of-available-workflows">Get list of available workflows</a></li>
+<li><a class="reference internal" href="#sanity-check-the-client">Sanity-check the client</a></li>
 <li><a class="reference internal" href="#run-a-workflow">Run a workflow</a></li>
 <li><a class="reference internal" href="#wait-for-a-result">Wait for a result</a></li>
+<li><a class="reference internal" href="#cancel-a-workflow">Cancel a workflow</a></li>
+<li><a class="reference internal" href="#answer-a-workflow-interaction">Answer a workflow interaction</a></li>
 </ul>
 </li>
 </ul>
