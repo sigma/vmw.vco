@@ -92,6 +92,9 @@ not undo what's already done, but will attempt to prevent from going further::
 Answer a workflow interaction
 =============================
 
+Some workflows require additional inputs in the middle of their execution,
+requiring more interactions::
+
   >>> wf = wfs[1]
 
   >>> run = wf.execute()
