@@ -12,4 +12,10 @@ setup(
                         'setuptools',
                         'Twisted',
                         ],
+
+    description="Python bindings for the VMware Orchestrator",
+    author="Yann Hodique",
+    author_email="yhodique@vmware.com",
+    url="http://sigma.github.com/vmw.vco",
+
 )
