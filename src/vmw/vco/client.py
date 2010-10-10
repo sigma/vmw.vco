@@ -372,10 +372,10 @@ class WorkflowToken(object):
     def waitQuestion(self, poll=1):
         if self._server._isAsynchronous():
             d = Deferred()
-            self.__wait(self.isFinished, poll, d)
+            self.__wait(self.isWaiting, poll, d)
             return d.addCallback(lambda _: self)
         else:
-            self.__wait(self.isFinished, poll)
+            self.__wait(self.isWaiting, poll)
             return self
 
     def answer(self, inputs):
