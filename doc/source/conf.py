@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# PyvCO documentation build configuration file, created by
+# vmw.vco documentation build configuration file, created by
 # sphinx-quickstart on Wed Oct  6 17:35:27 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'PyvCO'
+project = u'vmw.vco'
 copyright = u'2010, VMware Inc., Yann Hodique'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -164,7 +164,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PyvCOdoc'
+htmlhelp_basename = 'vmw.vcodoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -178,7 +178,7 @@ htmlhelp_basename = 'PyvCOdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'PyvCO.tex', u'PyvCO Documentation',
+  ('index', 'vmw.vco.tex', u'vmw.vco Documentation',
    u'VMware, Inc.', 'manual'),
 ]
 
@@ -211,7 +211,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'pyvco', u'PyvCO Documentation',
+    ('index', 'vmw.vco', u'vmw.vco Documentation',
      [u'VMware, Inc.'], 1)
 ]
 

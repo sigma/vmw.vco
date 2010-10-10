@@ -10,18 +10,18 @@ This includes vCO WebService.
 By using this module, one can (hopefully) obtain reasonable integration of vCO
 in a Python environment, as well as a useful testing environment.
 
-The use cases covered by PyvCO and this documentation are:
+The use cases covered by vmw.vco and this documentation are:
 
 * Communicate with a KL.next vCO using the :doc:`SOAP interface <soap>`.
 * Write tests targetting vCO.
-* Provide enough information to extend PyvCO in such a way that the above use
+* Provide enough information to extend vmw.vco in such a way that the above use
   cases remain consistent.
 
 Installation
 ============
 
-PyvCO is best installed using official package::
+vmw.vco is best installed using official package::
 
-  $ pip install pyvco
+  $ pip install vmw.vco
 
-This will fetch PyvCO and its dependencies from `Pypi <http://pypi.python.org>`_
+This will fetch vmw.vco and its dependencies from `Pypi <http://pypi.python.org>`_
