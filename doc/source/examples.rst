@@ -30,6 +30,8 @@ the ``echo``  test method of the vCO SOAP service::
 Get list of available workflows
 ===============================
 
+Now let's see what workflows are available in that vCO server::
+
   >>> wfs = c.getAllWorkflows()
 
   >>> print wfs
@@ -43,6 +45,8 @@ Get list of available workflows
 
 Run a workflow
 ==============
+
+Select a workflow, discover the inputs it requires, and run it::
 
   >>> wf = wfs[0]
 
@@ -60,6 +64,8 @@ Run a workflow
 
 Wait for a result
 =================
+
+Wait for workflow completion, and retrieve output::
 
   >>> run.waitResult()
   [<[out:string] foo>]
