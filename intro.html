@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction &mdash; vmw.vco v0.1 documentation</title>
+    <title>Introduction &mdash; vmw.vco v0.3 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,8 +21,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="vmw.vco v0.1 documentation" href="index.html" />
-    <link rel="next" title="Communicate with a KL or KL.next vCO" href="soap.html" />
+    <link rel="top" title="vmw.vco v0.3 documentation" href="index.html" />
+    <link rel="next" title="SOAP client usage" href="examples.html" />
     <link rel="prev" title="Welcome to vmw.vco’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -33,12 +33,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="soap.html" title="Communicate with a KL or KL.next vCO"
+          <a href="examples.html" title="SOAP client usage"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to vmw.vco’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">vmw.vco v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">vmw.vco v0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -68,6 +68,17 @@ cases remain consistent.</li>
 </div>
 <p>This will fetch vmw.vco and its dependencies from <a class="reference external" href="http://pypi.python.org">Pypi</a></p>
 </div>
+<div class="section" id="specificities">
+<h2>Specificities<a class="headerlink" href="#specificities" title="Permalink to this headline">¶</a></h2>
+<p>These bindings are declined in 2 similar, yet different versions: a synchronous
+and an asynchronous one.</p>
+<p>The synchronous version is based on the standard <a class="reference external" href="http://docs.python.org/library/httplib.html#module-httplib" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">httplib</span></tt></a> module, while
+the asynchronous version is based on the <a class="reference external" href="http://www.twistedmatrix.com">Twisted</a> framework.</p>
+<p>The differences in behavior between those two approaches are blurred as much as
+possible, so that the developer should feel at home in any case.  Bottom line,
+every call that goes to the server returns object <tt class="docutils literal"><span class="pre">X</span></tt> in synchronous mode,
+and a <tt class="docutils literal"><span class="pre">Deferred</span></tt> object that resolves to <tt class="docutils literal"><span class="pre">X</span></tt> in asynchronous mode.</p>
+</div>
 </div>
 
 
@@ -80,6 +91,7 @@ cases remain consistent.</li>
   <ul>
 <li><a class="reference internal" href="#">Introduction</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#specificities">Specificities</a></li>
 </ul>
 </li>
 </ul>
@@ -88,8 +100,8 @@ cases remain consistent.</li>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to vmw.vco&#8217;s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="soap.html"
-                        title="next chapter">Communicate with a KL or KL.next vCO</a></p>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">SOAP client usage</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/intro.txt"
@@ -119,12 +131,12 @@ cases remain consistent.</li>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="soap.html" title="Communicate with a KL or KL.next vCO"
+          <a href="examples.html" title="SOAP client usage"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to vmw.vco’s documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">vmw.vco v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">vmw.vco v0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
 

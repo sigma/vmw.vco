@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SOAP client usage &mdash; vmw.vco v0.1 documentation</title>
+    <title>SOAP client usage &mdash; vmw.vco v0.3 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,8 +21,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="vmw.vco v0.1 documentation" href="index.html" />
-    <link rel="prev" title="Communicate with a KL or KL.next vCO" href="soap.html" /> 
+    <link rel="top" title="vmw.vco v0.3 documentation" href="index.html" />
+    <link rel="next" title="Developer documentation" href="soap.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
   </head>
   <body>
     <div class="related">
@@ -32,9 +33,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="soap.html" title="Communicate with a KL or KL.next vCO"
+          <a href="soap.html" title="Developer documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">vmw.vco v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">vmw.vco v0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,8 +56,10 @@ modification, and without requiring installation of a vCO server.</p>
 <tt class="docutils literal"><span class="pre">Client</span></tt> object to a URL like
 <a class="reference external" href="http:/">http:/</a>/&lt;VCO_IP&gt;:8280/vmware-vmo-webcontrol/webservice instead (8280 is the
 default port used by vCO SOAP service).</p>
+<div class="section" id="synchronous-examples">
+<h2>Synchronous examples<a class="headerlink" href="#synchronous-examples" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="check-the-server-connection">
-<h2>Check the server connection<a class="headerlink" href="#check-the-server-connection" title="Permalink to this headline">¶</a></h2>
+<h3>Check the server connection<a class="headerlink" href="#check-the-server-connection" title="Permalink to this headline">¶</a></h3>
 <p>This simple example validates that everything is properly configured, by using
 the <tt class="docutils literal"><span class="pre">echo</span></tt>  test method of the vCO SOAP service:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vmw.vco.client</span> <span class="kn">import</span> <span class="n">Client</span>
@@ -67,7 +73,7 @@ the <tt class="docutils literal"><span class="pre">echo</span></tt>  test method
 </div>
 </div>
 <div class="section" id="get-list-of-available-workflows">
-<h2>Get list of available workflows<a class="headerlink" href="#get-list-of-available-workflows" title="Permalink to this headline">¶</a></h2>
+<h3>Get list of available workflows<a class="headerlink" href="#get-list-of-available-workflows" title="Permalink to this headline">¶</a></h3>
 <p>Now let&#8217;s see what workflows are available in that vCO server:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wfs</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">getAllWorkflows</span><span class="p">()</span>
 
@@ -83,7 +89,7 @@ the <tt class="docutils literal"><span class="pre">echo</span></tt>  test method
 </div>
 </div>
 <div class="section" id="sanity-check-the-client">
-<h2>Sanity-check the client<a class="headerlink" href="#sanity-check-the-client" title="Permalink to this headline">¶</a></h2>
+<h3>Sanity-check the client<a class="headerlink" href="#sanity-check-the-client" title="Permalink to this headline">¶</a></h3>
 <p>Similar to the <tt class="docutils literal"><span class="pre">echo</span></tt> command, there is an <tt class="docutils literal"><span class="pre">echoWorkflow</span></tt> one, that
 requires the client to provide some well-formatted workflow object:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wf</span> <span class="o">=</span> <span class="n">wfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -94,7 +100,7 @@ requires the client to provide some well-formatted workflow object:</p>
 </div>
 </div>
 <div class="section" id="run-a-workflow">
-<h2>Run a workflow<a class="headerlink" href="#run-a-workflow" title="Permalink to this headline">¶</a></h2>
+<h3>Run a workflow<a class="headerlink" href="#run-a-workflow" title="Permalink to this headline">¶</a></h3>
 <p>Select a workflow, discover the inputs it requires, and run it:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">wf</span><span class="o">.</span><span class="n">inParameters</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
@@ -111,15 +117,15 @@ requires the client to provide some well-formatted workflow object:</p>
 </div>
 </div>
 <div class="section" id="wait-for-a-result">
-<h2>Wait for a result<a class="headerlink" href="#wait-for-a-result" title="Permalink to this headline">¶</a></h2>
+<h3>Wait for a result<a class="headerlink" href="#wait-for-a-result" title="Permalink to this headline">¶</a></h3>
 <p>Wait for workflow completion, and retrieve output:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">waitResult</span><span class="p">()</span>
-<span class="go">[&lt;[out:string] foo&gt;]</span>
+<span class="go">{&#39;out&#39;: &lt;vmw.vco.components.TypedValue object at 0x1b7a690&gt;}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="cancel-a-workflow">
-<h2>Cancel a workflow<a class="headerlink" href="#cancel-a-workflow" title="Permalink to this headline">¶</a></h2>
+<h3>Cancel a workflow<a class="headerlink" href="#cancel-a-workflow" title="Permalink to this headline">¶</a></h3>
 <p>If some workflow has been run by mistake, you can always cancel it. That will
 not undo what&#8217;s already done, but will attempt to prevent from going further:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
@@ -129,7 +135,7 @@ not undo what&#8217;s already done, but will attempt to prevent from going furth
 </div>
 </div>
 <div class="section" id="answer-a-workflow-interaction">
-<h2>Answer a workflow interaction<a class="headerlink" href="#answer-a-workflow-interaction" title="Permalink to this headline">¶</a></h2>
+<h3>Answer a workflow interaction<a class="headerlink" href="#answer-a-workflow-interaction" title="Permalink to this headline">¶</a></h3>
 <p>Some workflows require additional inputs in the middle of their execution,
 requiring more interactions:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wf</span> <span class="o">=</span> <span class="n">wfs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -141,8 +147,9 @@ requiring more interactions:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">answer</span><span class="p">({</span><span class="s">&#39;answer&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">})</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">waitResult</span><span class="p">()</span>
-<span class="go">[]</span>
+<span class="go">{}</span>
 </pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -156,6 +163,7 @@ requiring more interactions:</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SOAP client usage</a><ul>
+<li><a class="reference internal" href="#synchronous-examples">Synchronous examples</a><ul>
 <li><a class="reference internal" href="#check-the-server-connection">Check the server connection</a></li>
 <li><a class="reference internal" href="#get-list-of-available-workflows">Get list of available workflows</a></li>
 <li><a class="reference internal" href="#sanity-check-the-client">Sanity-check the client</a></li>
@@ -166,10 +174,15 @@ requiring more interactions:</p>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
 
   <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
   <p class="topless"><a href="soap.html"
-                        title="previous chapter">Communicate with a KL or KL.next vCO</a></p>
+                        title="next chapter">Developer documentation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/examples.txt"
@@ -199,9 +212,12 @@ requiring more interactions:</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="soap.html" title="Communicate with a KL or KL.next vCO"
+          <a href="soap.html" title="Developer documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
              >previous</a> |</li>
-        <li><a href="index.html">vmw.vco v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">vmw.vco v0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
 

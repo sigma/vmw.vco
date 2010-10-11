@@ -13,8 +13,11 @@ In order to run the following examples against your own vCO server, connect the
 http://<VCO_IP>:8280/vmware-vmo-webcontrol/webservice instead (8280 is the
 default port used by vCO SOAP service).
 
+Synchronous examples
+====================
+
 Check the server connection
-===========================
+---------------------------
 
 This simple example validates that everything is properly configured, by using
 the ``echo``  test method of the vCO SOAP service::
@@ -28,7 +31,7 @@ the ``echo``  test method of the vCO SOAP service::
   foo
 
 Get list of available workflows
-===============================
+-------------------------------
 
 Now let's see what workflows are available in that vCO server::
 
@@ -44,7 +47,7 @@ Now let's see what workflows are available in that vCO server::
   Waiting workflow
 
 Sanity-check the client
-=======================
+-----------------------
 
 Similar to the ``echo`` command, there is an ``echoWorkflow`` one, that
 requires the client to provide some well-formatted workflow object::
@@ -55,7 +58,7 @@ requires the client to provide some well-formatted workflow object::
   <vmw.vco.client.Workflow object at 0x36d2650>
 
 Run a workflow
-==============
+--------------
 
 Select a workflow, discover the inputs it requires, and run it::
 
@@ -72,15 +75,15 @@ Select a workflow, discover the inputs it requires, and run it::
   <vmw.vco.client.WorkflowToken object at 0x2bb2210>
 
 Wait for a result
-=================
+-----------------
 
 Wait for workflow completion, and retrieve output::
 
   >>> run.waitResult()
-  [<[out:string] foo>]
+  {'out': <vmw.vco.components.TypedValue object at 0x1b7a690>}
 
 Cancel a workflow
-=================
+-----------------
 
 If some workflow has been run by mistake, you can always cancel it. That will
 not undo what's already done, but will attempt to prevent from going further::
@@ -90,7 +93,7 @@ not undo what's already done, but will attempt to prevent from going further::
   >>> run.cancel()
 
 Answer a workflow interaction
-=============================
+-----------------------------
 
 Some workflows require additional inputs in the middle of their execution,
 requiring more interactions::
@@ -104,4 +107,4 @@ requiring more interactions::
   >>> run.answer({'answer': 42})
 
   >>> run.waitResult()
-  []
+  {}

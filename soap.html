@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Communicate with a KL or KL.next vCO &mdash; vmw.vco v0.1 documentation</title>
+    <title>Developer documentation &mdash; vmw.vco v0.3 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,9 +21,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="vmw.vco v0.1 documentation" href="index.html" />
-    <link rel="next" title="SOAP client usage" href="examples.html" />
-    <link rel="prev" title="Introduction" href="intro.html" /> 
+    <link rel="top" title="vmw.vco v0.3 documentation" href="index.html" />
+    <link rel="prev" title="SOAP client usage" href="examples.html" /> 
   </head>
   <body>
     <div class="related">
@@ -33,12 +32,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="examples.html" title="SOAP client usage"
-             accesskey="N">next</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="Introduction"
+          <a href="examples.html" title="SOAP client usage"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">vmw.vco v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">vmw.vco v0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,16 +46,18 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="communicate-with-a-kl-or-kl-next-vco">
-<h1>Communicate with a KL or KL.next vCO<a class="headerlink" href="#communicate-with-a-kl-or-kl-next-vco" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="developer-documentation">
+<h1>Developer documentation<a class="headerlink" href="#developer-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="soap-interface">
 <h2>SOAP interface<a class="headerlink" href="#soap-interface" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="main-entry-point">
+<h3>Main entry point<a class="headerlink" href="#main-entry-point" title="Permalink to this headline">¶</a></h3>
 <p>The main entry point is:</p>
 <dl class="class">
 <dt id="vmw.vco.client.Client">
 <em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">Client</tt><a class="reference internal" href="_modules/vmw/vco/client.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implementation of a vCO webservice client.
-Calls implemented: 100%</p>
+API Calls implemented:</p>
 <ul class="simple">
 <li>echo</li>
 <li>echoWorkflow</li>
@@ -80,106 +81,522 @@ Calls implemented: 100%</p>
 </ul>
 <dl class="method">
 <dt id="vmw.vco.client.Client.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>url</em>, <em>username</em>, <em>password</em>, <em>async=False</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>url</em>, <em>username</em>, <em>password</em>, <em>async=False</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a client for target vCO server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>url</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; full URL for the target vCO SOAP service</li>
+<li><strong>username</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; user name</li>
+<li><strong>password</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; password for the user</li>
+<li><strong>async</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; whether to use asynchronous bindings</li>
+<li><strong>kw</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; keyword arguments passed to underlying <tt class="docutils literal"><span class="pre">Binding</span></tt> object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.answerWorkflowInput">
 <tt class="descname">answerWorkflowInput</tt><big>(</big><em>token</em>, <em>inputs={}</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.answerWorkflowInput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.answerWorkflowInput" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Provide answer for the user interaction the token is waiting on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>token</strong> (<a class="reference internal" href="#vmw.vco.client.WorkflowToken" title="vmw.vco.client.WorkflowToken"><em>vmw.vco.client.WorkflowToken</em></a>) &#8211; workflow token to answer to</li>
+<li><strong>inputs</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; input parameters to provide as an answer</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.cancelWorkflow">
 <tt class="descname">cancelWorkflow</tt><big>(</big><em>token</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.cancelWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.cancelWorkflow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Cancel specified workflow token.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>token</strong> (<a class="reference internal" href="#vmw.vco.client.WorkflowToken" title="vmw.vco.client.WorkflowToken"><em>vmw.vco.client.WorkflowToken</em></a>) &#8211; Token to cancel</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.echo">
 <tt class="descname">echo</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.echo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.echo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Test method. Echo back provided message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>msg</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Message to echo.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.echoWorkflow">
 <tt class="descname">echoWorkflow</tt><big>(</big><em>wf</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.echoWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.echoWorkflow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Test method. Echo back provided workflow.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>wf</strong> (<a class="reference internal" href="#vmw.vco.client.Workflow" title="vmw.vco.client.Workflow"><em>vmw.vco.client.Workflow</em></a>) &#8211; Workflow to echo.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.executeWorkflow">
 <tt class="descname">executeWorkflow</tt><big>(</big><em>wf</em>, <em>inputs={}</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.executeWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.executeWorkflow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Run a workflow with specified set of inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>wf</strong> (<a class="reference internal" href="#vmw.vco.client.Workflow" title="vmw.vco.client.Workflow"><em>vmw.vco.client.Workflow</em></a>) &#8211; workflow to run</li>
+<li><strong>inputs</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; inputs to run with</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.find">
 <tt class="descname">find</tt><big>(</big><em>type</em>, <em>query=''</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.find" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Find objects of a given type, that match a plug-in dependant query.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.findForId">
 <tt class="descname">findForId</tt><big>(</big><em>type</em>, <em>id</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.findForId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.findForId" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Find specific object, from it&#8217;s type and unique id.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.findRelation">
 <tt class="descname">findRelation</tt><big>(</big><em>type</em>, <em>id</em>, <em>relation</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.findRelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.findRelation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Find children of specific object (defined by its type and unique
+id), according to specified relation.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.getAllPlugins">
 <tt class="descname">getAllPlugins</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getAllPlugins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getAllPlugins" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve all plugins installed in the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list of <a class="reference internal" href="#vmw.vco.client.Plugin" title="vmw.vco.client.Plugin"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.client.Plugin</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.getAllWorkflows">
 <tt class="descname">getAllWorkflows</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getAllWorkflows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getAllWorkflows" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve all workflows installed in the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list of <a class="reference internal" href="#vmw.vco.client.Workflow" title="vmw.vco.client.Workflow"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.client.Workflow</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.getWorkflowForId">
 <tt class="descname">getWorkflowForId</tt><big>(</big><em>id</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowForId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowForId" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve workflow with specified id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Workflow id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.getWorkflowTokenForId">
 <tt class="descname">getWorkflowTokenForId</tt><big>(</big><em>token_id</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowTokenForId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowTokenForId" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve a workflow token from its id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>token_id</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; token id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.getWorkflowTokenResult">
 <tt class="descname">getWorkflowTokenResult</tt><big>(</big><em>token</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowTokenResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowTokenResult" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get result for workflow token. Only applies when the workflow execution is completed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>token</strong> (<a class="reference internal" href="#vmw.vco.client.WorkflowToken" title="vmw.vco.client.WorkflowToken"><em>vmw.vco.client.WorkflowToken</em></a>) &#8211; token to extract result from</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.getWorkflowTokenStatus">
 <tt class="descname">getWorkflowTokenStatus</tt><big>(</big><em>tokens</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowTokenStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowTokenStatus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get status for specified list of workflow tokens. Returns a list of
+status in the same order.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.getWorkflowsWithName">
 <tt class="descname">getWorkflowsWithName</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.getWorkflowsWithName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.getWorkflowsWithName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve all workflows with specified name (might be in different categories).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Workflow name</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.hasChildrenInRelation">
 <tt class="descname">hasChildrenInRelation</tt><big>(</big><em>type</em>, <em>id</em>, <em>relation</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.hasChildrenInRelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.hasChildrenInRelation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Check if specified object (defined by its type and unique id) has
+any children according to specified relation.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.hasRights">
 <tt class="descname">hasRights</tt><big>(</big><em>task</em>, <em>right</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.hasRights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.hasRights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Check if current user has rights over the specified task.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.sendCustomEvent">
 <tt class="descname">sendCustomEvent</tt><big>(</big><em>event</em>, <em>props</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.sendCustomEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.sendCustomEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Send a custom event with specified properties.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<a class="reference external" href="http://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; event to send</li>
+<li><strong>props</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; properties of the event</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="vmw.vco.client.Client.simpleExecuteWorkflow">
 <tt class="descname">simpleExecuteWorkflow</tt><big>(</big><em>wf</em>, <em>encoded_input</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Client.simpleExecuteWorkflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Client.simpleExecuteWorkflow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><strong>deprecated</strong></p>
+<p>Alternate way of executing a workflow. This will encode inputs in an
+unsafe way, please don&#8217;t use.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>wf</strong> (<a class="reference internal" href="#vmw.vco.client.Workflow" title="vmw.vco.client.Workflow"><em>vmw.vco.client.Workflow</em></a>) &#8211; workflow to run</li>
+<li><strong>inputs</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; inputs to run with</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
+</div>
+<div class="section" id="helper-objects">
+<h3>Helper objects<a class="headerlink" href="#helper-objects" title="Permalink to this headline">¶</a></h3>
+<p>A collection of helpers is also provided, that make use of the API more object-oriented:</p>
+<dl class="class">
+<dt id="vmw.vco.client.Plugin">
+<em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">Plugin</tt><a class="reference internal" href="_modules/vmw/vco/client.html#Plugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Plugin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="vmw.vco.client.Plugin.description">
+<tt class="descname">description</tt><a class="headerlink" href="#vmw.vco.client.Plugin.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plugin description</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.Plugin.name">
+<tt class="descname">name</tt><a class="headerlink" href="#vmw.vco.client.Plugin.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plugin name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.Plugin.version">
+<tt class="descname">version</tt><a class="headerlink" href="#vmw.vco.client.Plugin.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plugin version</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="vmw.vco.client.Workflow">
+<em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">Workflow</tt><a class="reference internal" href="_modules/vmw/vco/client.html#Workflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Workflow" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="vmw.vco.client.Workflow.attributes">
+<tt class="descname">attributes</tt><a class="headerlink" href="#vmw.vco.client.Workflow.attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Workflow attributes. list
+of <a class="reference internal" href="#vmw.vco.client.WorkflowAttribute" title="vmw.vco.client.WorkflowAttribute"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.client.WorkflowAttribute</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.Workflow.description">
+<tt class="descname">description</tt><a class="headerlink" href="#vmw.vco.client.Workflow.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Workflow description</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="vmw.vco.client.Workflow.execute">
+<tt class="descname">execute</tt><big>(</big><em>inputs={}</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#Workflow.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.Workflow.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute this workflow with provided input parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>inputs</strong> (<a class="reference external" href="http://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; input parameters</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.Workflow.id">
+<tt class="descname">id</tt><a class="headerlink" href="#vmw.vco.client.Workflow.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Workflow id</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.Workflow.inParameters">
+<tt class="descname">inParameters</tt><a class="headerlink" href="#vmw.vco.client.Workflow.inParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Workflow input parameters. list
+of <a class="reference internal" href="#vmw.vco.client.WorkflowAttribute" title="vmw.vco.client.WorkflowAttribute"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.client.WorkflowAttribute</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.Workflow.name">
+<tt class="descname">name</tt><a class="headerlink" href="#vmw.vco.client.Workflow.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Workflow name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.Workflow.outParameters">
+<tt class="descname">outParameters</tt><a class="headerlink" href="#vmw.vco.client.Workflow.outParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Workflow output parameters. list
+of <a class="reference internal" href="#vmw.vco.client.WorkflowAttribute" title="vmw.vco.client.WorkflowAttribute"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.client.WorkflowAttribute</span></tt></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="vmw.vco.client.WorkflowAttribute">
+<em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">WorkflowAttribute</tt><a class="reference internal" href="_modules/vmw/vco/client.html#WorkflowAttribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.WorkflowAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="vmw.vco.client.WorkflowAttribute.name">
+<tt class="descname">name</tt><a class="headerlink" href="#vmw.vco.client.WorkflowAttribute.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attribute name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.WorkflowAttribute.type">
+<tt class="descname">type</tt><a class="headerlink" href="#vmw.vco.client.WorkflowAttribute.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attribute type</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="vmw.vco.client.WorkflowToken">
+<em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">WorkflowToken</tt><a class="reference internal" href="_modules/vmw/vco/client.html#WorkflowToken"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.WorkflowToken" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="vmw.vco.client.WorkflowToken.globalState">
+<tt class="descname">globalState</tt><a class="headerlink" href="#vmw.vco.client.WorkflowToken.globalState" title="Permalink to this definition">¶</a></dt>
+<dd><p>WorkflowToken state</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.WorkflowToken.id">
+<tt class="descname">id</tt><a class="headerlink" href="#vmw.vco.client.WorkflowToken.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>WorkflowToken id</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.WorkflowToken.title">
+<tt class="descname">title</tt><a class="headerlink" href="#vmw.vco.client.WorkflowToken.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>WorkflowToken title</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.WorkflowToken.workflowId">
+<tt class="descname">workflowId</tt><a class="headerlink" href="#vmw.vco.client.WorkflowToken.workflowId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Related Workflow id</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="vmw.vco.client.FinderResult">
+<em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">FinderResult</tt><a class="reference internal" href="_modules/vmw/vco/client.html#FinderResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.FinderResult" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="vmw.vco.client.FinderResult.id">
+<tt class="descname">id</tt><a class="headerlink" href="#vmw.vco.client.FinderResult.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>FinderResult id</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.FinderResult.properties">
+<tt class="descname">properties</tt><a class="headerlink" href="#vmw.vco.client.FinderResult.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>FinderResult properties (dict)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="vmw.vco.client.FinderResult.uri">
+<tt class="descname">uri</tt><a class="headerlink" href="#vmw.vco.client.FinderResult.uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>FinderResult uri</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="using-objects">
+<h2>Using objects<a class="headerlink" href="#using-objects" title="Permalink to this headline">¶</a></h2>
+<p>A surprisingly challenging part in using vCO SOAP API is to provide workflows
+with proper input parameters. For that it&#8217;s necessary to generate valid
+representations of all types that can be used as input. For immediate values,
+it&#8217;s rather easy (and worst case, <a class="reference internal" href="#vmw.vco.components.TypedValue" title="vmw.vco.components.TypedValue"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.components.TypedValue</span></tt></a> can be
+used to wrap anything).</p>
+<dl class="class">
+<dt id="vmw.vco.components.TypedValue">
+<em class="property">class </em><tt class="descclassname">vmw.vco.components.</tt><tt class="descname">TypedValue</tt><a class="reference internal" href="_modules/vmw/vco/components.html#TypedValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.components.TypedValue" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="vmw.vco.components.TypedValue.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>type</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/components.html#TypedValue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.components.TypedValue.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a typed value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>type</strong> &#8211; type of the value</li>
+<li><strong>value</strong> &#8211; string representation of the value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<p>For objects, it&#8217;s more complicated, as they can come from different places
+(workflow output, finder result, other component that&#8217;s specific to your
+application&#8217;s logic).</p>
+<p>The rule in vmw.vco is that a valid input is something that implements the
+interface <tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.interfaces.ITypedValue</span></tt>. This include of
+course <a class="reference internal" href="#vmw.vco.components.TypedValue" title="vmw.vco.components.TypedValue"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.components.TypedValue</span></tt></a>, but also everything that has an
+<em>adapter</em> registered for that interface.</p>
+<p>In particular, the <em>adapters</em> from <a class="reference internal" href="#module-vmw.vco.adapters" title="vmw.vco.adapters"><tt class="xref py py-mod docutils literal"><span class="pre">vmw.vco.adapters</span></tt></a> are loaded by default.</p>
+<span class="target" id="module-vmw.vco.adapters"></span><dl class="class">
+<dt id="vmw.vco.adapters.BoolValue">
+<em class="property">class </em><tt class="descclassname">vmw.vco.adapters.</tt><tt class="descname">BoolValue</tt><big>(</big><em>original</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/adapters.html#BoolValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.adapters.BoolValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adapter from bool to ITypedValue.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="vmw.vco.adapters.IntValue">
+<em class="property">class </em><tt class="descclassname">vmw.vco.adapters.</tt><tt class="descname">IntValue</tt><big>(</big><em>original</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/adapters.html#IntValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.adapters.IntValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adapter from int to ITypedValue.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="vmw.vco.adapters.StringValue">
+<em class="property">class </em><tt class="descclassname">vmw.vco.adapters.</tt><tt class="descname">StringValue</tt><big>(</big><em>original</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/adapters.html#StringValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.adapters.StringValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adapter from string to ITypedValue.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="vmw.vco.adapters.adapter">
+<tt class="descclassname">vmw.vco.adapters.</tt><tt class="descname">adapter</tt><big>(</big><em>ifrom</em>, <em>ito</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/adapters.html#adapter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.adapters.adapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to help registering a new adapter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ifrom</strong> &#8211; interface or class to adapt</li>
+<li><strong>ito</strong> &#8211; interface to expose</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>So, if you have some custom objects that could be transformed into an input
+value, just register an adapter for it, and pass it !</p>
 </div>
 </div>
 
@@ -191,18 +608,20 @@ Calls implemented: 100%</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Communicate with a KL or KL.next vCO</a><ul>
-<li><a class="reference internal" href="#soap-interface">SOAP interface</a></li>
+<li><a class="reference internal" href="#">Developer documentation</a><ul>
+<li><a class="reference internal" href="#soap-interface">SOAP interface</a><ul>
+<li><a class="reference internal" href="#main-entry-point">Main entry point</a></li>
+<li><a class="reference internal" href="#helper-objects">Helper objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-objects">Using objects</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="intro.html"
-                        title="previous chapter">Introduction</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="examples.html"
-                        title="next chapter">SOAP client usage</a></p>
+                        title="previous chapter">SOAP client usage</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/soap.txt"
@@ -232,12 +651,12 @@ Calls implemented: 100%</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="examples.html" title="SOAP client usage"
-             >next</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="Introduction"
+          <a href="examples.html" title="SOAP client usage"
              >previous</a> |</li>
-        <li><a href="index.html">vmw.vco v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">vmw.vco v0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
 

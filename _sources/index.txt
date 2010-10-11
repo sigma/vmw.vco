@@ -13,8 +13,8 @@ Contents:
    :maxdepth: 3
 
    intro
-   soap
    examples
+   soap
 
 Indices and tables
 ==================
