@@ -3,7 +3,7 @@ import os
 
 setup(
     name = "vmw.vco",
-    version = "0.2",
+    version = "0.3",
     package_dir = {'': 'src'},
     packages = find_packages('src'),
     namespace_packages = ['vmw',],
