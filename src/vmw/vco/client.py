@@ -6,14 +6,16 @@ import generated.VSOWebControlService_client_async as async_client
 from types import WorkflowTokenAttribute as _WorkflowTokenAttribute, Workflow as _Workflow
 from vmw.ZSI import EvaluateException
 from interfaces import ITypedValue
+from components import TypedValue
 
 from twisted.internet.defer import Deferred
 from twisted.internet import task, reactor
+from zope.interface import implements
 
 class Client(object):
     """
     Implementation of a vCO webservice client.
-    Calls implemented: 100%
+    API Calls implemented:
 
     - echo
     - echoWorkflow
@@ -36,14 +38,26 @@ class Client(object):
     - sendCustomEvent
     """
 
-    # see https://wiki.eng.vmware.com/BFG:JiDine/LDAPSetups for default
-    # credentials
     def __init__(self,
                  url = "http://localhost:8280/vmware-vmo-webcontrol/webservice",
                  username = "admin",
                  password = "admin",
                  async = False,
                  **kw):
+        """
+        Build a client for target vCO server.
+
+        :param url: full URL for the target vCO SOAP service
+        :type url: string
+        :param username: user name
+        :type username: string
+        :param password: password for the user
+        :type password: string
+        :param async: whether to use asynchronous bindings
+        :type async: bool
+        :param kw: keyword arguments passed to underlying ``Binding`` object
+        :type kw: dict
+        """
         self._url = url
         self._username = username
         self._password = password
@@ -98,18 +112,41 @@ class Client(object):
         return self._mod is async_client
 
     def getAllWorkflows(self):
+        """Retrieve all workflows installed in the server.
+
+        :rtype: list of :class:`vmw.vco.client.Workflow`
+        """
         return self._getAllWorkflows()
 
     def getAllPlugins(self):
+        """Retrieve all plugins installed in the server.
+
+        :rtype: list of :class:`vmw.vco.client.Plugin`
+        """
         return self._getAllPlugins()
 
     def getWorkflowForId(self, id):
+        """Retrieve workflow with specified id.
+
+        :param id: Workflow id
+        :type id: string
+        """
         return self._getWorkflowForId(workflowId=id)
 
     def getWorkflowsWithName(self, name):
+        """Retrieve all workflows with specified name (might be in different categories).
+
+        :param name: Workflow name
+        :type name: string
+        """
         return self._getWorkflowsWithName(workflowName=name)
 
     def cancelWorkflow(self, token):
+        """Cancel specified workflow token.
+
+        :param token: Token to cancel
+        :type token: vmw.vco.client.WorkflowToken
+        """
         return self._cancelWorkflow(workflowTokenId=token.id)
 
     def __readInputs(self, inputs):
@@ -124,43 +161,92 @@ class Client(object):
         return real_inputs
 
     def executeWorkflow(self, wf, inputs={}):
+        """Run a workflow with specified set of inputs.
+
+        :param wf: workflow to run
+        :type wf: vmw.vco.client.Workflow
+        :param inputs: inputs to run with
+        :type inputs: dict
+        """
         return self._executeWorkflow(workflowId=wf.id,
                                      workflowInputs=self.__readInputs(inputs))
 
     def simpleExecuteWorkflow(self, wf, encoded_input):
+        """**deprecated**
+
+        Alternate way of executing a workflow. This will encode inputs in an
+        unsafe way, please don't use.
+
+        :param wf: workflow to run
+        :type wf: vmw.vco.client.Workflow
+        :param inputs: inputs to run with
+        :type inputs: dict
+        """
         return self._simpleExecuteWorkflow(in0=wf.id, in3=encoded_input)
 
     def getWorkflowTokenForId(self, token_id):
+        """Retrieve a workflow token from its id.
+
+        :param token_id: token id
+        :type token_id: string
+        """
         return self._getWorkflowTokenForId(workflowTokenId=token_id)
 
     def getWorkflowTokenResult(self, token):
+        """Get result for workflow token. Only applies when the workflow execution is completed.
+
+        :param token: token to extract result from
+        :type token: vmw.vco.client.WorkflowToken
+        """
         return self._getWorkflowTokenResult(workflowTokenId=token.id)
 
     def getWorkflowTokenStatus(self, tokens):
+        """Get status for specified list of workflow tokens. Returns a list of
+        status in the same order.
+        """
         return self._getWorkflowTokenStatus(workflowTokenIds=[t.id for t in tokens])
 
     def answerWorkflowInput(self, token, inputs={}):
+        """Provide answer for the user interaction the token is waiting on.
+
+        :param token: workflow token to answer to
+        :type token: vmw.vco.client.WorkflowToken
+        :param inputs: input parameters to provide as an answer
+        :type inputs: dict
+        """
         return self._answerWorkflowInput(workflowTokenId=token.id,
                                          answerInputs=self.__readInputs(inputs))
 
     def hasRights(self, task, right):
+        """Check if current user has rights over the specified task."""
         return self._hasRights(taskId=task.id, right=right)
 
     def sendCustomEvent(self, event, props):
+        """Send a custom event with specified properties.
+
+        :param event: event to send
+        :type event: string
+        :param props: properties of the event
+        :type props: dict
+        """
         props = "\n".join(["%s=%s" % (str(key), str(val))
                            for (key, val) in props.items()])
         return self._sendCustomEvent(eventName=event, serializedProperties=props)
 
     def find(self, type, query=""):
+        """Find objects of a given type, that match a plug-in dependant query."""
         return self._find(type=type, query=query)
 
     def findForId(self, type, id):
+        """Find specific object, from it's type and unique id."""
         try:
             return self._findForId(type=type, id=id)
         except EvaluateException:
             return None
 
     def findRelation(self, type, id, relation):
+        """Find children of specific object (defined by its type and unique
+        id), according to specified relation."""
         try:
             return self._findRelation(parentType=type, parentId=id,
                                       relationName=relation)
@@ -168,13 +254,25 @@ class Client(object):
             return []
 
     def hasChildrenInRelation(self, type, id, relation):
+        """Check if specified object (defined by its type and unique id) has
+        any children according to specified relation."""
         return self._hasChildrenInRelation(parentType=type, parentId=id,
                                            relationName=relation)
 
     def echo(self, msg):
+        """Test method. Echo back provided message.
+
+        :param msg: Message to echo.
+        :type msg: string
+        """
         return self._echo(message=msg)
 
     def echoWorkflow(self, wf):
+        """Test method. Echo back provided workflow.
+
+        :param wf: Workflow to echo.
+        :type wf: vmw.vco.client.Workflow
+        """
         return self._echoWorkflow(workflowMessage=wf._holder)
 
     def _getAllPluginsTrans(self, res):
@@ -193,7 +291,7 @@ class Client(object):
         return WorkflowToken(self, res)
 
     def _getWorkflowTokenResultTrans(self, res):
-        return [WorkflowTokenAttribute(self, t) for t in res]
+        return dict([(t._name, TypedValue(t._type, t._value)) for t in res])
 
     def _getWorkflowTokenStatusTrans(self, res):
         translate = {"running": WorkflowToken.RUNNING,
@@ -262,9 +360,12 @@ class Plugin(object):
         self._server = server
         self._holder = holder
 
+        #: Plugin name
         self.name = holder._moduleName
+        #: Plugin description
         self.description = holder._moduleDescription
         self._repr = holder._moduleDisplayName
+        #: Plugin version
         self.version = holder._moduleVersion
 
     def __repr__(self):
@@ -275,7 +376,9 @@ class WorkflowAttribute(object):
         self._server = server
         self._holder = holder
 
+        #: Attribute name
         self.name = holder._name
+        #: Attribute type
         self.type = holder._type
 
 class Workflow(object):
@@ -283,17 +386,31 @@ class Workflow(object):
         self._server = server
         self._holder = holder
 
+        #: Workflow id
         self.id = holder._id
+        #: Workflow name
         self.name = holder._name
+        #: Workflow description
         self.description = holder._description
+        #: Workflow input parameters. list
+        #: of :class:`vmw.vco.client.WorkflowAttribute`
         self.inParameters = self.__convertAttributes(holder._inParameters)
+        #: Workflow output parameters. list
+        #: of :class:`vmw.vco.client.WorkflowAttribute`
         self.outParameters = self.__convertAttributes(holder._outParameters)
+        #: Workflow attributes. list
+        #: of :class:`vmw.vco.client.WorkflowAttribute`
         self.attributes = self.__convertAttributes(holder._attributes)
 
     def __convertAttributes(self, attrs):
         return [WorkflowAttribute(self._server, it) for it in attrs._item]
 
     def execute(self, inputs={}):
+        """Execute this workflow with provided input parameters.
+
+        :param inputs: input parameters
+        :type inputs: dict
+        """
         return self._server.executeWorkflow(self, inputs)
 
 class WorkflowToken(object):
@@ -309,11 +426,15 @@ class WorkflowToken(object):
         self._server = server
         self._holder = holder
 
+        #: WorkflowToken id
         self.id = holder._id
+        #: WorkflowToken title
         self.title = holder._title
+        #: Related Workflow id
         self.workflowId = holder._workflowId
         self.currentItemName = holder._currentItemName
         self.currentItemState = holder._currentItemState
+        #: WorkflowToken state
         self.globalState = holder._globalState
         self.startDate = holder._startDate
         self.endDate = holder._endDate
@@ -381,31 +502,24 @@ class WorkflowToken(object):
     def answer(self, inputs):
         return self._server.answerWorkflowInput(self, inputs)
 
-class WorkflowTokenAttribute(object):
-    def __init__(self, server, holder):
-        self._server = server
-        self._holder = holder
-
-        self.name = holder._name
-        self.type = holder._type
-        self.value = holder._value
-
-    def __repr__(self):
-        return "<[%s:%s] %s>" % (self.name, self.type, self.value)
-
 class Rights(object):
     READ = ord('r')
     WRITE = ord('c')
     EXECUTE = ord('x')
 
 class FinderResult(object):
+
+    implements(ITypedValue)
+
     def __init__(self, server, holder):
         self._server = server
         self._holder = holder
 
-        self.type = holder._type
+        #: FinderResult id
         self.id = holder._id
+        #: FinderResult uri
         self.uri = holder._dunesUri
+        #: FinderResult properties (dict)
         self.properties = self.__readProperties(holder._properties)
 
     def __readProperties(self, props):
@@ -413,3 +527,9 @@ class FinderResult(object):
         for i in props._item:
             res[i._name] = i._value
         return res
+
+    def type(self):
+        return self._holder._type
+
+    def value(self):
+        return self.uri

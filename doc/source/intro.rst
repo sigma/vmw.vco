@@ -25,3 +25,18 @@ vmw.vco is best installed using official package::
   $ pip install vmw.vco
 
 This will fetch vmw.vco and its dependencies from `Pypi <http://pypi.python.org>`_
+
+Specificities
+=============
+
+These bindings are declined in 2 similar, yet different versions: a synchronous
+and an asynchronous one.
+
+The synchronous version is based on the standard :mod:`httplib` module, while
+the asynchronous version is based on the `Twisted
+<http://www.twistedmatrix.com>`_ framework.
+
+The differences in behavior between those two approaches are blurred as much as
+possible, so that the developer should feel at home in any case.  Bottom line,
+every call that goes to the server returns object ``X`` in synchronous mode,
+and a ``Deferred`` object that resolves to ``X`` in asynchronous mode.
