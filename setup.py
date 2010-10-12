@@ -4,6 +4,7 @@ import os
 setup(
     name = "vmw.vco",
     version = "0.3",
+    license="MIT",
     package_dir = {'': 'src'},
     packages = find_packages('src'),
     namespace_packages = ['vmw',],
