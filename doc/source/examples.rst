@@ -79,8 +79,11 @@ Wait for a result
 
 Wait for workflow completion, and retrieve output::
 
-  >>> run.waitResult()
+  >>> res = run.waitResult()
   {'out': <vmw.vco.components.TypedValue object at 0x1b7a690>}
+
+  >>> print res['out'].value()
+  foo
 
 Cancel a workflow
 -----------------
@@ -108,3 +111,47 @@ requiring more interactions::
 
   >>> run.waitResult()
   {}
+
+Asynchronous examples
+=====================
+
+Here is a quick scenario to demonstrate how to use this API in an asynchronous
+way::
+
+  from vmw.vco.client import Client
+  from twisted.internet import reactor
+
+  def dummy():
+      c = Client(url='http://vco-gae.appspot.com:80/vmware-vmo-webcontrol/webservice',
+                 username='admin', password='admin', async=True)
+
+      def _display(val):
+          print val
+
+      c.getWorkflowForId("94db6b5e-cabf-11df-9ffb-002618405f6e")\
+       .addCallback(lambda wf: wf.execute({'in': 'foo'}))\
+       .addCallback(lambda run: run.WaitResult())\
+       .addCallback(lambda res: _display(res[out]))
+
+  dummy()
+  reactor.run()
+
+
+Alternately, using a Monocle-like syntax::
+
+  from vmw.vco.client import Client
+  from twisted.internet import reactor
+  from twisted.internet.defer import inlineCallbacks as _o
+
+  @_o
+  def dummy():
+      c = Client(url='http://vco-gae.appspot.com:80/vmware-vmo-webcontrol/webservice',
+                 username='admin', password='admin', async=True)
+
+      wf = yield c.getWorkflowForId("94db6b5e-cabf-11df-9ffb-002618405f6e")
+      run = yield wf.execute({'in': 'foo'})
+      res = yield run.WaitResult()
+      print res[out]
+
+  dummy()
+  reactor.run()
