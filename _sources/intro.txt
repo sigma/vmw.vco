@@ -13,6 +13,8 @@ in a Python environment, as well as a useful testing environment.
 The use cases covered by vmw.vco and this documentation are:
 
 * Communicate with a KL.next vCO using the :doc:`SOAP interface <soap>`.
+* Provide a consistent API for synchronous and asynchronous applications
+  (`Twisted <http://www.twistedmatric.com/>`_ is supported)
 * Write tests targetting vCO.
 * Provide enough information to extend vmw.vco in such a way that the above use
   cases remain consistent.
