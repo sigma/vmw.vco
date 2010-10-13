@@ -125,15 +125,15 @@ way::
       c = Client(url='http://vco-gae.appspot.com:80/vmware-vmo-webcontrol/webservice',
                  username='admin', password='admin', async=True)
 
-      def _display(val):
-          print val
+      def _display(x):
+          print x.value()
 
-      c.getWorkflowForId("94db6b5e-cabf-11df-9ffb-002618405f6e")\
-       .addCallback(lambda wf: wf.execute({'in': 'foo'}))\
-       .addCallback(lambda run: run.WaitResult())\
-       .addCallback(lambda res: _display(res[out]))
+      return c.getWorkflowForId("94db6b5e-cabf-11df-9ffb-002618405f6e")\
+              .addCallback(lambda wf: wf.execute({'in': 'foo'}))\
+              .addCallback(lambda run: run.waitResult())\
+              .addCallback(lambda res: _display(res['out']))
 
-  dummy()
+  dummy().addCallback(lambda _: reactor.stop())
   reactor.run()
 
 
@@ -150,8 +150,8 @@ Alternately, using a Monocle-like syntax::
 
       wf = yield c.getWorkflowForId("94db6b5e-cabf-11df-9ffb-002618405f6e")
       run = yield wf.execute({'in': 'foo'})
-      res = yield run.WaitResult()
-      print res[out]
+      res = yield run.waitResult()
+      print res['out'].value()
 
-  dummy()
+  dummy().addCallback(lambda _: reactor.stop())
   reactor.run()
