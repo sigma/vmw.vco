@@ -1,0 +1,10 @@
+{% extends "base.xml" %}
+{% block body %}
+<vco:echoResponse>
+  <vco:echoReturn>{{ message }}</vco:echoReturn>
+</vco:echoResponse>
+{% endblock %}
+
+{# Local Variables:         #}
+{# mode: django-html-mumamo #}
+{# End:                     #}
