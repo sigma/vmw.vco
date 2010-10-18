@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from vmw.vco.client import Client
 
-_fake_url = "http://vco.example.com:8280/vmware-vmo-webcontrol/webservice"
+_fake_url = "http://vco.example.com/vmware-vmo-webcontrol/webservice"
 _echo_operation = "echo"
 _echo_msg = "plop"
 
