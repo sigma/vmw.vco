@@ -3,7 +3,7 @@ import time
 import generated.VSOWebControlService_client_sync as sync_client
 import generated.VSOWebControlService_client_async as async_client
 
-from types import WorkflowTokenAttribute as _WorkflowTokenAttribute, Workflow as _Workflow
+from types import WorkflowTokenAttribute as _WorkflowTokenAttribute
 from vmw.ZSI import EvaluateException
 from interfaces import ITypedValue
 from components import TypedValue
@@ -344,7 +344,10 @@ class Client(object):
                 # extract relevant value from response object
                 res = getattr(resp, "_" + name + "Return", None)
                 # optionally transform result
-                return (trans and trans(res)) or res
+                if trans:
+                    return trans(res)
+                else:
+                    return res
 
             if isinstance(resp, Deferred):
                 resp.addCallback(__extractRes, name, trans)

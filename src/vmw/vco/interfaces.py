@@ -10,3 +10,4 @@ class ITypedValue(Interface):
 
 # automatically register adapters from this module
 import adapters
+adapters = adapters
