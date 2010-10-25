@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>vmw.vco.adapters &mdash; vmw.vco v0.3 documentation</title>
+    <title>vmw.vco.adapters &mdash; vmw.vco v0.3.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.3',
+        VERSION:     '0.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="vmw.vco v0.3 documentation" href="../../../index.html" />
+    <link rel="top" title="vmw.vco v0.3.1 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">vmw.vco v0.3 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">vmw.vco v0.3.1 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -71,18 +71,21 @@
 
 <span class="nd">@adapter</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">ITypedValue</span><span class="p">)</span>
 <div class="viewcode-block" id="StringValue"><a class="viewcode-back" href="../../../soap.html#vmw.vco.adapters.StringValue">[docs]</a><span class="k">class</span> <span class="nc">StringValue</span><span class="p">(</span><span class="n">PrimitiveAdapter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adapter from string to ITypedValue.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;string&quot;</span>
 </div>
 <span class="nd">@adapter</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">ITypedValue</span><span class="p">)</span>
 <div class="viewcode-block" id="IntValue"><a class="viewcode-back" href="../../../soap.html#vmw.vco.adapters.IntValue">[docs]</a><span class="k">class</span> <span class="nc">IntValue</span><span class="p">(</span><span class="n">PrimitiveAdapter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adapter from int to ITypedValue.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;number&quot;</span>
 </div>
 <span class="nd">@adapter</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">ITypedValue</span><span class="p">)</span>
 <div class="viewcode-block" id="BoolValue"><a class="viewcode-back" href="../../../soap.html#vmw.vco.adapters.BoolValue">[docs]</a><span class="k">class</span> <span class="nc">BoolValue</span><span class="p">(</span><span class="n">PrimitiveAdapter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adapter from bool to ITypedValue.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;boolean&quot;</span></div>
@@ -119,7 +122,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">vmw.vco v0.3 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">vmw.vco v0.3.1 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

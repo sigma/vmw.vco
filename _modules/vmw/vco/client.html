@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>vmw.vco.client &mdash; vmw.vco v0.3 documentation</title>
+    <title>vmw.vco.client &mdash; vmw.vco v0.3.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.3',
+        VERSION:     '0.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="vmw.vco v0.3 documentation" href="../../../index.html" />
+    <link rel="top" title="vmw.vco v0.3.1 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">vmw.vco v0.3 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">vmw.vco v0.3.1 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -53,9 +53,11 @@
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">WorkflowTokenAttribute</span> <span class="k">as</span> <span class="n">_WorkflowTokenAttribute</span><span class="p">,</span> <span class="n">Workflow</span> <span class="k">as</span> <span class="n">_Workflow</span>
 <span class="kn">from</span> <span class="nn">vmw.ZSI</span> <span class="kn">import</span> <span class="n">EvaluateException</span>
 <span class="kn">from</span> <span class="nn">interfaces</span> <span class="kn">import</span> <span class="n">ITypedValue</span>
+<span class="kn">from</span> <span class="nn">components</span> <span class="kn">import</span> <span class="n">TypedValue</span>
 
 <span class="kn">from</span> <span class="nn">twisted.internet.defer</span> <span class="kn">import</span> <span class="n">Deferred</span>
 <span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">task</span><span class="p">,</span> <span class="n">reactor</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
 
 <div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -217,19 +219,38 @@
                                      <span class="n">workflowInputs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__readInputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="Client.simpleExecuteWorkflow"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.simpleExecuteWorkflow">[docs]</a>    <span class="k">def</span> <span class="nf">simpleExecuteWorkflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">encoded_input</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;**deprecated** Alternate way of executing a workflow</span>
+        <span class="sd">&quot;&quot;&quot;**deprecated**</span>
 
-<span class="sd">        plop</span>
+<span class="sd">        Alternate way of executing a workflow. This will encode inputs in an</span>
+<span class="sd">        unsafe way, please don&#39;t use.</span>
+
+<span class="sd">        :param wf: workflow to run</span>
+<span class="sd">        :type wf: vmw.vco.client.Workflow</span>
+<span class="sd">        :param inputs: inputs to run with</span>
+<span class="sd">        :type inputs: dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simpleExecuteWorkflow</span><span class="p">(</span><span class="n">in0</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">in3</span><span class="o">=</span><span class="n">encoded_input</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Client.getWorkflowTokenForId"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowTokenForId">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowTokenForId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve a workflow token from its id.</span>
+
+<span class="sd">        :param token_id: token id</span>
+<span class="sd">        :type token_id: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenForId</span><span class="p">(</span><span class="n">workflowTokenId</span><span class="o">=</span><span class="n">token_id</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Client.getWorkflowTokenResult"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowTokenResult">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowTokenResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get result for workflow token. Only applies when the workflow execution is completed.</span>
+
+<span class="sd">        :param token: token to extract result from</span>
+<span class="sd">        :type token: vmw.vco.client.WorkflowToken</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenResult</span><span class="p">(</span><span class="n">workflowTokenId</span><span class="o">=</span><span class="n">token</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Client.getWorkflowTokenStatus"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.getWorkflowTokenStatus">[docs]</a>    <span class="k">def</span> <span class="nf">getWorkflowTokenStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get status for specified list of workflow tokens. Returns a list of</span>
+<span class="sd">        status in the same order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getWorkflowTokenStatus</span><span class="p">(</span><span class="n">workflowTokenIds</span><span class="o">=</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">])</span>
 </div>
 <div class="viewcode-block" id="Client.answerWorkflowInput"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.answerWorkflowInput">[docs]</a>    <span class="k">def</span> <span class="nf">answerWorkflowInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{}):</span>
@@ -244,9 +265,17 @@
                                          <span class="n">answerInputs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__readInputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="Client.hasRights"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.hasRights">[docs]</a>    <span class="k">def</span> <span class="nf">hasRights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if current user has rights over the specified task.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hasRights</span><span class="p">(</span><span class="n">taskId</span><span class="o">=</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Client.sendCustomEvent"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.sendCustomEvent">[docs]</a>    <span class="k">def</span> <span class="nf">sendCustomEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a custom event with specified properties.</span>
+
+<span class="sd">        :param event: event to send</span>
+<span class="sd">        :type event: string</span>
+<span class="sd">        :param props: properties of the event</span>
+<span class="sd">        :type props: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">props</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
                            <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sendCustomEvent</span><span class="p">(</span><span class="n">eventName</span><span class="o">=</span><span class="n">event</span><span class="p">,</span> <span class="n">serializedProperties</span><span class="o">=</span><span class="n">props</span><span class="p">)</span>
@@ -272,6 +301,8 @@
             <span class="k">return</span> <span class="p">[]</span>
 </div>
 <div class="viewcode-block" id="Client.hasChildrenInRelation"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client.hasChildrenInRelation">[docs]</a>    <span class="k">def</span> <span class="nf">hasChildrenInRelation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">relation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if specified object (defined by its type and unique id) has</span>
+<span class="sd">        any children according to specified relation.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hasChildrenInRelation</span><span class="p">(</span><span class="n">parentType</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span> <span class="n">parentId</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
                                            <span class="n">relationName</span><span class="o">=</span><span class="n">relation</span><span class="p">)</span>
 </div>
@@ -307,7 +338,7 @@
         <span class="k">return</span> <span class="n">WorkflowToken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_getWorkflowTokenResultTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">WorkflowTokenAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">t</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">TypedValue</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">_type</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">_value</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">res</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_getWorkflowTokenStatusTrans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
         <span class="n">translate</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;running&quot;</span><span class="p">:</span> <span class="n">WorkflowToken</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">,</span>
@@ -518,27 +549,19 @@
     <span class="k">def</span> <span class="nf">answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="o">.</span><span class="n">answerWorkflowInput</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="WorkflowTokenAttribute"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.WorkflowTokenAttribute">[docs]</a><span class="k">class</span> <span class="nc">WorkflowTokenAttribute</span><span class="p">(</span><span class="n">WorkflowAttribute</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
-        <span class="n">WorkflowAttribute</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">)</span>
-        <span class="c">#: Value stored in this attribute</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_value</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;&lt;[</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">] </span><span class="si">%s</span><span class="s">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-</div>
 <span class="k">class</span> <span class="nc">Rights</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">READ</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
     <span class="n">WRITE</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
     <span class="n">EXECUTE</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FinderResult"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.FinderResult">[docs]</a><span class="k">class</span> <span class="nc">FinderResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITypedValue</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span> <span class="o">=</span> <span class="n">holder</span>
 
-        <span class="c">#: FinderResult type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_type</span>
         <span class="c">#: FinderResult id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">holder</span><span class="o">.</span><span class="n">_id</span>
         <span class="c">#: FinderResult uri</span>
@@ -550,7 +573,13 @@
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">_item</span><span class="p">:</span>
             <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">_value</span>
-        <span class="k">return</span> <span class="n">res</span></div>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_holder</span><span class="o">.</span><span class="n">_type</span>
+
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span></div>
 </pre></div>
 
           </div>
@@ -584,7 +613,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">vmw.vco v0.3 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">vmw.vco v0.3.1 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
