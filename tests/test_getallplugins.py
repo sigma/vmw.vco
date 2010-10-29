@@ -1,7 +1,6 @@
-import sys
 from mock_transports import TransportFactory
-from unittest import TestCase
-from nose.plugins.attrib import attr
+from unittest2 import TestCase
+import sys
 
 from vmw.vco.client import Client, Plugin
 
@@ -25,7 +24,6 @@ class TestGetAllPlugins(TestCase):
         for p in plugs:
             self.assertTrue(isinstance(p, Plugin))
 
-    @attr(state="stable")
     def testBasicPlugin(self):
         _params = {'plugins': [{'name': 'plop',
                                 'version': '0.1',
@@ -33,7 +31,6 @@ class TestGetAllPlugins(TestCase):
                                 'display': 'Plop'}]}
         self._testPluginBase(_params)
 
-    @attr(state="stable")
     def testIncompletePlugins(self):
         _params = {'plugins': [{'version': '0.1',
                                 'desc': 'plop plug-in',

@@ -1,6 +1,5 @@
 from mock_transports import TransportFactory
-from unittest import TestCase
-from nose.plugins.attrib import attr
+from unittest2 import TestCase
 from xml.sax.saxutils import escape as xml_escape
 
 from vmw.vco.client import Client
@@ -23,14 +22,11 @@ class TestEcho(TestCase):
         resp = self._client.echo(msg)
         self.assertEqual(resp, msg)
 
-    @attr(state="stable")
     def testEcho(self):
         self._testEchoBase("plop")
 
-    @attr(state="stable")
     def testEchoLong(self):
         self._testEchoBase("repeated pattern"*50)
 
-    @attr(state="stable")
     def testEchoXml(self):
         self._testEchoBase("<foo/><bar>baz</bar>")
