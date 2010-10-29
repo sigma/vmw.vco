@@ -1,11 +1,12 @@
 from mock_transports import TransportFactory
 from unittest import TestCase
+from nose.plugins.attrib import attr
+from xml.sax.saxutils import escape as xml_escape
 
 from vmw.vco.client import Client
 
 _fake_url = "http://vco.example.com/vmware-vmo-webcontrol/webservice"
 _echo_operation = "echo"
-_echo_msg = "plop"
 
 class TestEcho(TestCase):
 
@@ -14,10 +15,22 @@ class TestEcho(TestCase):
         self._client = Client(_fake_url,
                               transport=self._transport)
 
-    def testEcho(self):
+    def _testEchoBase(self, msg):
         self._transport.recordTransaction(_echo_operation,
-                                          request_checker = lambda req: req._message == _echo_msg,
-                                          response_params = {'message': _echo_msg})
+                                          request_checker = lambda req: req._message == msg,
+                                          response_params = {'message': xml_escape(msg)})
 
-        resp = self._client.echo(_echo_msg)
-        self.assertEqual(resp, _echo_msg)
+        resp = self._client.echo(msg)
+        self.assertEqual(resp, msg)
+
+    @attr(state="stable")
+    def testEcho(self):
+        self._testEchoBase("plop")
+
+    @attr(state="stable")
+    def testEchoLong(self):
+        self._testEchoBase("repeated pattern"*50)
+
+    @attr(state="stable")
+    def testEchoXml(self):
+        self._testEchoBase("<foo/><bar>baz</bar>")
