@@ -16,6 +16,10 @@ setup(
                         'setuptools',
                         'Twisted',
                         ],
+    extra_requires = {'async': 'Twisted'},
+    setup_requires = ['unittest2',
+                      'sphinx',
+                      ],
 
     description = "Python bindings for the VMware Orchestrator",
     long_description=read('README'),
@@ -31,4 +35,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         ],
 
+    test_suite = 'unittest2.collector'
 )

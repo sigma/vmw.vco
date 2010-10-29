@@ -13,8 +13,7 @@ class TestGetAllPlugins(TestCase):
         self._transport = TransportFactory()
         self._client = Client(_fake_url,
                               username="foo", password="bar",
-                              transport=self._transport,
-                              tracefile=sys.stdout)
+                              transport=self._transport)
 
     def _testPluginBase(self, params):
         self._transport.recordTransaction(_operation,
