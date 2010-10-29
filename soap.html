@@ -526,14 +526,14 @@ of <a class="reference internal" href="#vmw.vco.client.WorkflowAttribute" title=
 <p>A surprisingly challenging part in using vCO SOAP API is to provide workflows
 with proper input parameters. For that it&#8217;s necessary to generate valid
 representations of all types that can be used as input. For immediate values,
-it&#8217;s rather easy (and worst case, <a class="reference internal" href="#vmw.vco.components.TypedValue" title="vmw.vco.components.TypedValue"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.components.TypedValue</span></tt></a> can be
+it&#8217;s rather easy (and worst case, <a class="reference internal" href="#vmw.vco.client.TypedValue" title="vmw.vco.client.TypedValue"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.client.TypedValue</span></tt></a> can be
 used to wrap anything).</p>
 <dl class="class">
-<dt id="vmw.vco.components.TypedValue">
-<em class="property">class </em><tt class="descclassname">vmw.vco.components.</tt><tt class="descname">TypedValue</tt><a class="reference internal" href="_modules/vmw/vco/components.html#TypedValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.components.TypedValue" title="Permalink to this definition">¶</a></dt>
+<dt id="vmw.vco.client.TypedValue">
+<em class="property">class </em><tt class="descclassname">vmw.vco.client.</tt><tt class="descname">TypedValue</tt><a class="reference internal" href="_modules/vmw/vco/client.html#TypedValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.TypedValue" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
-<dt id="vmw.vco.components.TypedValue.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>type</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/components.html#TypedValue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.components.TypedValue.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="vmw.vco.client.TypedValue.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>type</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/vmw/vco/client.html#TypedValue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#vmw.vco.client.TypedValue.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a typed value</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -556,7 +556,7 @@ used to wrap anything).</p>
 application&#8217;s logic).</p>
 <p>The rule in vmw.vco is that a valid input is something that implements the
 interface <tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.interfaces.ITypedValue</span></tt>. This include of
-course <a class="reference internal" href="#vmw.vco.components.TypedValue" title="vmw.vco.components.TypedValue"><tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.components.TypedValue</span></tt></a>, but also everything that has an
+course <tt class="xref py py-class docutils literal"><span class="pre">vmw.vco.components.TypedValue</span></tt>, but also everything that has an
 <em>adapter</em> registered for that interface.</p>
 <p>In particular, the <em>adapters</em> from <a class="reference internal" href="#module-vmw.vco.adapters" title="vmw.vco.adapters"><tt class="xref py py-mod docutils literal"><span class="pre">vmw.vco.adapters</span></tt></a> are loaded by default.</p>
 <span class="target" id="module-vmw.vco.adapters"></span><dl class="class">

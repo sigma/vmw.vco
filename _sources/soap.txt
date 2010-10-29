@@ -41,13 +41,13 @@ Using objects
 A surprisingly challenging part in using vCO SOAP API is to provide workflows
 with proper input parameters. For that it's necessary to generate valid
 representations of all types that can be used as input. For immediate values,
-it's rather easy (and worst case, :class:`vmw.vco.components.TypedValue` can be
+it's rather easy (and worst case, :class:`vmw.vco.client.TypedValue` can be
 used to wrap anything).
 
-.. autoclass:: vmw.vco.components.TypedValue()
+.. autoclass:: vmw.vco.client.TypedValue()
    :members:
 
-   .. automethod:: vmw.vco.components.TypedValue.__init__(self, type, value)
+   .. automethod:: vmw.vco.client.TypedValue.__init__(self, type, value)
 
 For objects, it's more complicated, as they can come from different places
 (workflow output, finder result, other component that's specific to your

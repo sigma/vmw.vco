@@ -45,18 +45,43 @@
           <div class="body">
             
   <h1>Source code for vmw.vco.client</h1><div class="highlight"><pre>
+<span class="c"># Copyright (c) 2009-2010 VMware, Inc. All Rights Reserved.</span>
+
+<span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c"># in the Software without restriction, including without limitation the rights</span>
+<span class="c"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c"># copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c"># furnished to do so, subject to the following conditions:</span>
+
+<span class="c"># The above copyright notice and this permission notice shall be included in</span>
+<span class="c"># all copies or substantial portions of the Software.</span>
+
+<span class="c"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
+<span class="c"># THE SOFTWARE.</span>
+
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">generated.VSOWebControlService_client_sync</span> <span class="kn">as</span> <span class="nn">sync_client</span>
 <span class="kn">import</span> <span class="nn">generated.VSOWebControlService_client_async</span> <span class="kn">as</span> <span class="nn">async_client</span>
 
-<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">WorkflowTokenAttribute</span> <span class="k">as</span> <span class="n">_WorkflowTokenAttribute</span><span class="p">,</span> <span class="n">Workflow</span> <span class="k">as</span> <span class="n">_Workflow</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">WorkflowTokenAttribute</span> <span class="k">as</span> <span class="n">_WorkflowTokenAttribute</span>
 <span class="kn">from</span> <span class="nn">vmw.ZSI</span> <span class="kn">import</span> <span class="n">EvaluateException</span>
 <span class="kn">from</span> <span class="nn">interfaces</span> <span class="kn">import</span> <span class="n">ITypedValue</span>
-<span class="kn">from</span> <span class="nn">components</span> <span class="kn">import</span> <span class="n">TypedValue</span>
 
-<span class="kn">from</span> <span class="nn">twisted.internet.defer</span> <span class="kn">import</span> <span class="n">Deferred</span>
-<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">task</span><span class="p">,</span> <span class="n">reactor</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">twisted.internet.defer</span> <span class="kn">import</span> <span class="n">Deferred</span>
+    <span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">task</span><span class="p">,</span> <span class="n">reactor</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">TWISTED_PRESENT</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">TWISTED_PRESENT</span> <span class="o">=</span> <span class="bp">True</span>
+
 <span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implements</span>
 
 <div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -110,6 +135,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span>
 
         <span class="k">if</span> <span class="n">async</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">TWISTED_PRESENT</span><span class="p">,</span> <span class="s">&quot;asynchronous mode cannot be used without Twisted library&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mod</span> <span class="o">=</span> <span class="n">async_client</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">async_client</span><span class="o">.</span><span class="n">VSOWebControlServiceLocator</span><span class="p">()</span><span class="o">.</span><span class="n">getwebservice</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">binding</span><span class="o">.</span><span class="n">defer</span> <span class="o">=</span> <span class="n">async</span>
@@ -391,7 +417,10 @@
                 <span class="c"># extract relevant value from response object</span>
                 <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&quot;Return&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
                 <span class="c"># optionally transform result</span>
-                <span class="k">return</span> <span class="p">(</span><span class="n">trans</span> <span class="ow">and</span> <span class="n">trans</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="ow">or</span> <span class="n">res</span>
+                <span class="k">if</span> <span class="n">trans</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">trans</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">res</span>
 
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">Deferred</span><span class="p">):</span>
                 <span class="n">resp</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="n">__extractRes</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span>
@@ -401,6 +430,24 @@
 
         <span class="c"># add the method to this object</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">_func</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TypedValue"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.TypedValue">[docs]</a><span class="k">class</span> <span class="nc">TypedValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">implements</span><span class="p">(</span><span class="n">ITypedValue</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TypedValue.__init__"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.TypedValue.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build a typed value</span>
+
+<span class="sd">        :param type: type of the value</span>
+<span class="sd">        :param value: string representation of the value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span>
+
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
 </div>
 <div class="viewcode-block" id="Plugin"><a class="viewcode-back" href="../../../soap.html#vmw.vco.client.Plugin">[docs]</a><span class="k">class</span> <span class="nc">Plugin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">holder</span><span class="p">):</span>
