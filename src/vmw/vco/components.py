@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2010 VMware, Inc. All Rights Reserved.
+# Copyright (c) 2001-2010 Twisted Matrix Laboratories.
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -18,23 +18,45 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from zope.interface import implements
-from interfaces import ITypedValue
+from zope.interface import interface, implements
+from zope.interface.adapter import AdapterRegistry
 
-class TypedValue(object):
-    implements(ITypedValue)
+# The following is taken almots as-is from twisted.python.components
+_vcoRegistry = AdapterRegistry()
 
-    def __init__(self, type, value):
-        """Build a typed value
+def _registered(registry, required, provided):
+    """
+    Return the adapter factory for the given parameters in the given
+    registry, or None if there is not one.
+    """
+    return registry.get(required).selfImplied.get(provided, {}).get('')
 
-        :param type: type of the value
-        :param value: string representation of the value
-        """
-        self._type = type
-        self._value = value
+def registerAdapter(adapterFactory, origInterface, *interfaceClasses):
+    """Register an adapter class.
 
-    def type(self):
-        return self._type
+    An adapter class is expected to implement the given interface, by
+    adapting instances implementing 'origInterface'. An adapter class's
+    __init__ method should accept one parameter, an instance implementing
+    'origInterface'.
+    """
+    assert interfaceClasses, "You need to pass an Interface"
 
-    def value(self):
-        return self._value
+    # deal with class->interface adapters:
+    if not isinstance(origInterface, interface.InterfaceClass):
+        origInterface = declarations.implementedBy(origInterface)
+
+    for interfaceClass in interfaceClasses:
+        factory = _registered(_vcoRegistry, origInterface, interfaceClass)
+        if factory is not None:
+            raise ValueError("an adapter (%s) was already registered." % (factory, ))
+    for interfaceClass in interfaceClasses:
+        _vcoRegistry.register([origInterface], interfaceClass, '', adapterFactory)
+
+# add global adapter lookup hook for our newly created registry
+def _hook(iface, ob, lookup=_vcoRegistry.lookup1):
+    factory = lookup(declarations.providedBy(ob), iface)
+    if factory is None:
+        return None
+    else:
+        return factory(ob)
+interface.adapter_hooks.append(_hook)

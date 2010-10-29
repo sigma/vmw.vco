@@ -26,10 +26,15 @@ import generated.VSOWebControlService_client_async as async_client
 from types import WorkflowTokenAttribute as _WorkflowTokenAttribute
 from vmw.ZSI import EvaluateException
 from interfaces import ITypedValue
-from components import TypedValue
 
-from twisted.internet.defer import Deferred
-from twisted.internet import task, reactor
+try:
+    from twisted.internet.defer import Deferred
+    from twisted.internet import task, reactor
+except ImportError:
+    TWISTED_PRESENT = False
+else:
+    TWISTED_PRESENT = True
+
 from zope.interface import implements
 
 class Client(object):
@@ -83,6 +88,7 @@ class Client(object):
         self._password = password
 
         if async:
+            assert TWISTED_PRESENT, "asynchronous mode cannot be used without Twisted library"
             self._mod = async_client
             self.service = async_client.VSOWebControlServiceLocator().getwebservice(url, **kw)
             self.service.binding.defer = async
@@ -377,6 +383,24 @@ class Client(object):
 
         # add the method to this object
         setattr(self, "_" + name, _func)
+
+class TypedValue(object):
+    implements(ITypedValue)
+
+    def __init__(self, type, value):
+        """Build a typed value
+
+        :param type: type of the value
+        :param value: string representation of the value
+        """
+        self._type = type
+        self._value = value
+
+    def type(self):
+        return self._type
+
+    def value(self):
+        return self._value
 
 class Plugin(object):
     def __init__(self, server, holder):
