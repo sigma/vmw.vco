@@ -1,8 +1,14 @@
 from setuptools import setup, find_packages
 import os
+import sys
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+if sys.version_info < (2, 7):
+    setup_requires_version = ['unittest2']
+else:
+    setup_requires_version = []
 
 setup(
     name = "vmw.vco",
@@ -16,10 +22,10 @@ setup(
                         'setuptools',
                         'zope.interface',
                         ],
-    extra_requires = {'async': 'Twisted'},
-    setup_requires = ['unittest2',
-                      'sphinx',
-                      ],
+    extra_requires = {'async': 'Twisted',
+                      'doc': 'sphinx'},
+    setup_requires = ['jinja2',
+                      ] + setup_requires_version,
 
     description = "Python bindings for the VMware Orchestrator",
     long_description=read('README'),

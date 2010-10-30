@@ -1,5 +1,5 @@
 from mock_transports import TransportFactory
-from unittest2 import TestCase
+from base import TestCase
 from xml.sax.saxutils import escape as xml_escape
 
 from vmw.vco.client import Client

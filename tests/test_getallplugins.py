@@ -1,5 +1,5 @@
 from mock_transports import TransportFactory
-from unittest2 import TestCase
+from base import TestCase
 import sys
 
 from vmw.vco.client import Client, Plugin
