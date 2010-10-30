@@ -8,7 +8,7 @@
 
 from vmw.ZSI.schema import GED, GTD
 from vmw.ZSI.TCcompound import ComplexType, Struct
-from VSOWebControlService_types import *
+from .VSOWebControlService_types import *
 from vmw.ZSI.twisted.WSresource import WSResource
 
 # Messages  

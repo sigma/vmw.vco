@@ -257,7 +257,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.find_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"type"), aname="_type", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"query"), aname="_query", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'find')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'find')
             kw["aname"] = "_find"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -279,7 +279,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.findResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","QueryResult",lazy=False)(pname=(ns,"findReturn"), aname="_findReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'findResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'findResponse')
             kw["aname"] = "_findResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -298,7 +298,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.echo_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"message"), aname="_message", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'echo')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'echo')
             kw["aname"] = "_echo"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -317,7 +317,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.echoResponse_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"echoReturn"), aname="_echoReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'echoResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'echoResponse')
             kw["aname"] = "_echoResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -336,7 +336,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.echoWorkflow_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","Workflow",lazy=False)(pname=(ns,"workflowMessage"), aname="_workflowMessage", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'echoWorkflow')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'echoWorkflow')
             kw["aname"] = "_echoWorkflow"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -355,7 +355,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.echoWorkflowResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","Workflow",lazy=False)(pname=(ns,"echoWorkflowReturn"), aname="_echoWorkflowReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'echoWorkflowResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'echoWorkflowResponse')
             kw["aname"] = "_echoWorkflowResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -374,7 +374,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.sendCustomEvent_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"eventName"), aname="_eventName", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"serializedProperties"), aname="_serializedProperties", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'sendCustomEvent')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'sendCustomEvent')
             kw["aname"] = "_sendCustomEvent"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -394,7 +394,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.sendCustomEventResponse_Dec.schema
             TClist = []
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'sendCustomEventResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'sendCustomEventResponse')
             kw["aname"] = "_sendCustomEventResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -412,7 +412,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowForId_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowId"), aname="_workflowId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowForId')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowForId')
             kw["aname"] = "_getWorkflowForId"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -433,7 +433,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowForIdResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","Workflow",lazy=False)(pname=(ns,"getWorkflowForIdReturn"), aname="_getWorkflowForIdReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowForIdResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowForIdResponse')
             kw["aname"] = "_getWorkflowForIdResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -452,7 +452,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getAllWorkflows_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getAllWorkflows')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getAllWorkflows')
             kw["aname"] = "_getAllWorkflows"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -472,7 +472,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getAllWorkflowsResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","Workflow",lazy=False)(pname=(ns,"getAllWorkflowsReturn"), aname="_getAllWorkflowsReturn", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getAllWorkflowsResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getAllWorkflowsResponse')
             kw["aname"] = "_getAllWorkflowsResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -491,7 +491,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowsWithName_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowName"), aname="_workflowName", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowsWithName')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowsWithName')
             kw["aname"] = "_getWorkflowsWithName"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -512,7 +512,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowsWithNameResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","Workflow",lazy=False)(pname=(ns,"getWorkflowsWithNameReturn"), aname="_getWorkflowsWithNameReturn", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowsWithNameResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowsWithNameResponse')
             kw["aname"] = "_getWorkflowsWithNameResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -531,7 +531,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.executeWorkflow_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowId"), aname="_workflowId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), GTD("http://webservice.vso.dunes.ch","WorkflowTokenAttribute",lazy=False)(pname=(ns,"workflowInputs"), aname="_workflowInputs", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'executeWorkflow')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'executeWorkflow')
             kw["aname"] = "_executeWorkflow"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -553,7 +553,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.executeWorkflowResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","WorkflowToken",lazy=False)(pname=(ns,"executeWorkflowReturn"), aname="_executeWorkflowReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'executeWorkflowResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'executeWorkflowResponse')
             kw["aname"] = "_executeWorkflowResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -572,7 +572,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.simpleExecuteWorkflow_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"in0"), aname="_in0", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"in1"), aname="_in1", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"in2"), aname="_in2", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"in3"), aname="_in3", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'simpleExecuteWorkflow')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'simpleExecuteWorkflow')
             kw["aname"] = "_simpleExecuteWorkflow"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -594,7 +594,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.simpleExecuteWorkflowResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","WorkflowToken",lazy=False)(pname=(ns,"simpleExecuteWorkflowReturn"), aname="_simpleExecuteWorkflowReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'simpleExecuteWorkflowResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'simpleExecuteWorkflowResponse')
             kw["aname"] = "_simpleExecuteWorkflowResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -613,7 +613,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.cancelWorkflow_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowTokenId"), aname="_workflowTokenId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'cancelWorkflow')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'cancelWorkflow')
             kw["aname"] = "_cancelWorkflow"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -634,7 +634,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.cancelWorkflowResponse_Dec.schema
             TClist = []
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'cancelWorkflowResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'cancelWorkflowResponse')
             kw["aname"] = "_cancelWorkflowResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -652,7 +652,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowTokenResult_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowTokenId"), aname="_workflowTokenId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowTokenResult')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowTokenResult')
             kw["aname"] = "_getWorkflowTokenResult"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -673,7 +673,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowTokenResultResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","WorkflowTokenAttribute",lazy=False)(pname=(ns,"getWorkflowTokenResultReturn"), aname="_getWorkflowTokenResultReturn", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowTokenResultResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowTokenResultResponse')
             kw["aname"] = "_getWorkflowTokenResultResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -692,7 +692,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowTokenForId_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowTokenId"), aname="_workflowTokenId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowTokenForId')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowTokenForId')
             kw["aname"] = "_getWorkflowTokenForId"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -713,7 +713,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowTokenForIdResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","WorkflowToken",lazy=False)(pname=(ns,"getWorkflowTokenForIdReturn"), aname="_getWorkflowTokenForIdReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowTokenForIdResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowTokenForIdResponse')
             kw["aname"] = "_getWorkflowTokenForIdResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -732,7 +732,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowTokenStatus_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowTokenIds"), aname="_workflowTokenIds", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowTokenStatus')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowTokenStatus')
             kw["aname"] = "_getWorkflowTokenStatus"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -753,7 +753,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getWorkflowTokenStatusResponse_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"getWorkflowTokenStatusReturn"), aname="_getWorkflowTokenStatusReturn", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getWorkflowTokenStatusResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getWorkflowTokenStatusResponse')
             kw["aname"] = "_getWorkflowTokenStatusResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -772,7 +772,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.answerWorkflowInput_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"workflowTokenId"), aname="_workflowTokenId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), GTD("http://webservice.vso.dunes.ch","WorkflowTokenAttribute",lazy=False)(pname=(ns,"answerInputs"), aname="_answerInputs", minOccurs=1, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'answerWorkflowInput')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'answerWorkflowInput')
             kw["aname"] = "_answerWorkflowInput"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -794,7 +794,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.answerWorkflowInputResponse_Dec.schema
             TClist = []
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'answerWorkflowInputResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'answerWorkflowInputResponse')
             kw["aname"] = "_answerWorkflowInputResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -812,7 +812,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.hasRights_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"taskId"), aname="_taskId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TCnumbers.Iint(pname=(ns,"right"), aname="_right", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'hasRights')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'hasRights')
             kw["aname"] = "_hasRights"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -834,7 +834,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.hasRightsResponse_Dec.schema
             TClist = [vmw.ZSI.TC.Boolean(pname=(ns,"hasRightsReturn"), aname="_hasRightsReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'hasRightsResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'hasRightsResponse')
             kw["aname"] = "_hasRightsResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -853,7 +853,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getAllPlugin_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"in0"), aname="_in0", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"in1"), aname="_in1", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getAllPlugin')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getAllPlugin')
             kw["aname"] = "_getAllPlugin"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -873,7 +873,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getAllPluginResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","ModuleInfo",lazy=False)(pname=(ns,"getAllPluginReturn"), aname="_getAllPluginReturn", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getAllPluginResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getAllPluginResponse')
             kw["aname"] = "_getAllPluginResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -892,7 +892,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getAllPlugins_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getAllPlugins')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getAllPlugins')
             kw["aname"] = "_getAllPlugins"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -912,7 +912,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.getAllPluginsResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","ModuleInfo",lazy=False)(pname=(ns,"getAllPluginsReturn"), aname="_getAllPluginsReturn", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'getAllPluginsResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'getAllPluginsResponse')
             kw["aname"] = "_getAllPluginsResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -931,7 +931,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.findForId_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"type"), aname="_type", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"id"), aname="_id", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'findForId')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'findForId')
             kw["aname"] = "_findForId"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -953,7 +953,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.findForIdResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","FinderResult",lazy=False)(pname=(ns,"findForIdReturn"), aname="_findForIdReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'findForIdResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'findForIdResponse')
             kw["aname"] = "_findForIdResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -972,7 +972,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.findRelation_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"parentType"), aname="_parentType", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"parentId"), aname="_parentId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"relationName"), aname="_relationName", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'findRelation')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'findRelation')
             kw["aname"] = "_findRelation"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -995,7 +995,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.findRelationResponse_Dec.schema
             TClist = [GTD("http://webservice.vso.dunes.ch","FinderResult",lazy=False)(pname=(ns,"findRelationReturn"), aname="_findRelationReturn", minOccurs=0, maxOccurs="unbounded", nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'findRelationResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'findRelationResponse')
             kw["aname"] = "_findRelationResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -1014,7 +1014,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.hasChildrenInRelation_Dec.schema
             TClist = [vmw.ZSI.TC.String(pname=(ns,"parentType"), aname="_parentType", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"parentId"), aname="_parentId", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"relationName"), aname="_relationName", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"username"), aname="_username", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded")), vmw.ZSI.TC.String(pname=(ns,"password"), aname="_password", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'hasChildrenInRelation')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'hasChildrenInRelation')
             kw["aname"] = "_hasChildrenInRelation"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
@@ -1037,7 +1037,7 @@ class ns0:
         def __init__(self, **kw):
             ns = ns0.hasChildrenInRelationResponse_Dec.schema
             TClist = [vmw.ZSI.TCnumbers.Iint(pname=(ns,"hasChildrenInRelationReturn"), aname="_hasChildrenInRelationReturn", minOccurs=1, maxOccurs=1, nillable=False, typed=False, encoded=kw.get("encoded"))]
-            kw["pname"] = (u'http://webservice.vso.dunes.ch', u'hasChildrenInRelationResponse')
+            kw["pname"] = ('http://webservice.vso.dunes.ch', 'hasChildrenInRelationResponse')
             kw["aname"] = "_hasChildrenInRelationResponse"
             self.attribute_typecode_dict = {}
             vmw.ZSI.TCcompound.ComplexType.__init__(self,None,TClist,inorder=0,**kw)
