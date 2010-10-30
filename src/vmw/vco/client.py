@@ -20,15 +20,15 @@
 
 import time
 
-import generated.VSOWebControlService_client_sync as sync_client
+import vmw.vco.generated.VSOWebControlService_client_sync as sync_client
 
-from types import WorkflowTokenAttribute as _WorkflowTokenAttribute
+from vmw.vco.types import WorkflowTokenAttribute as _WorkflowTokenAttribute
 from vmw.ZSI import EvaluateException
-from interfaces import ITypedValue
+from vmw.vco.interfaces import ITypedValue
 
 # Twisted is optional
 try:
-    import generated.VSOWebControlService_client_async as async_client
+    import vmw.vco.generated.VSOWebControlService_client_async as async_client
     from twisted.internet.defer import Deferred
     from twisted.internet import task, reactor
 except ImportError:
@@ -178,7 +178,7 @@ class Client(object):
 
     def __readInputs(self, inputs):
         real_inputs = []
-        for k in inputs.keys():
+        for k in list(inputs.keys()):
             i = _WorkflowTokenAttribute()
             i._name = k
             wrap = ITypedValue(inputs[k])
@@ -257,7 +257,7 @@ class Client(object):
         :type props: dict
         """
         props = "\n".join(["%s=%s" % (str(key), str(val))
-                           for (key, val) in props.items()])
+                           for (key, val) in list(props.items())])
         return self._sendCustomEvent(eventName=event, serializedProperties=props)
 
     def find(self, type, query=""):
@@ -359,7 +359,7 @@ class Client(object):
                     user_field, pwd_field = auth
                     setattr(req, '_' + user_field, self._username)
                     setattr(req, '_' + pwd_field, self._password)
-            keys = keywords.keys()
+            keys = list(keywords.keys())
             # build the request object with all specified components
             for kw in keys:
                 setattr(req, "_" + kw, keywords[kw])

@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from generated.VSOWebControlService_types import ns0
+from vmw.vco.generated.VSOWebControlService_types import ns0
 from vmw.ZSI.schema import GTD
 
 __schema = ns0.targetNamespace

@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 from zope.interface import classImplements
-import components
-from interfaces import ITypedValue
+import vmw.vco.components as components
+from vmw.vco.interfaces import ITypedValue
 
 def adapter(ifrom, ito):
     """Decorator to help registering a new adapter.

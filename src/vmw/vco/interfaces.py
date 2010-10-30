@@ -29,5 +29,5 @@ class ITypedValue(Interface):
         """Return the representation of the object value (a string)."""
 
 # automatically register adapters from this module
-import adapters
+import vmw.vco.adapters as adapters
 adapters = adapters
