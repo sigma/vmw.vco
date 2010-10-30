@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from zope.interface import interface, implements
+from zope.interface import interface, implements, declarations
 from zope.interface.adapter import AdapterRegistry
 
 # The following is taken almots as-is from twisted.python.components

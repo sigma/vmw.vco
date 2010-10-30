@@ -19,7 +19,7 @@
 # THE SOFTWARE.
 
 from zope.interface import classImplements
-from twisted.python import components
+import components
 from interfaces import ITypedValue
 
 def adapter(ifrom, ito):
@@ -42,23 +42,23 @@ class PrimitiveAdapter(object):
     def value(self):
         return "%s" % (self._original)
 
-@adapter(str, ITypedValue)
 class StringValue(PrimitiveAdapter):
     """Adapter from string to ITypedValue."""
 
     def type(self):
         return "string"
+StringValue = adapter(str, ITypedValue)(StringValue)
 
-@adapter(int, ITypedValue)
 class IntValue(PrimitiveAdapter):
     """Adapter from int to ITypedValue."""
 
     def type(self):
         return "number"
+IntValue = adapter(int, ITypedValue)(IntValue)
 
-@adapter(bool, ITypedValue)
 class BoolValue(PrimitiveAdapter):
     """Adapter from bool to ITypedValue."""
 
     def type(self):
         return "boolean"
+BoolValue = adapter(bool, ITypedValue)(BoolValue)

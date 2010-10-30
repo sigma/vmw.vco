@@ -21,13 +21,14 @@
 import time
 
 import generated.VSOWebControlService_client_sync as sync_client
-import generated.VSOWebControlService_client_async as async_client
 
 from types import WorkflowTokenAttribute as _WorkflowTokenAttribute
 from vmw.ZSI import EvaluateException
 from interfaces import ITypedValue
 
+# Twisted is optional
 try:
+    import generated.VSOWebControlService_client_async as async_client
     from twisted.internet.defer import Deferred
     from twisted.internet import task, reactor
 except ImportError:
@@ -375,7 +376,7 @@ class Client(object):
                 else:
                     return res
 
-            if isinstance(resp, Deferred):
+            if TWISTED_PRESENT and isinstance(resp, Deferred):
                 resp.addCallback(__extractRes, name, trans)
                 return resp
             else:

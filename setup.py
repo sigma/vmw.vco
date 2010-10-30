@@ -14,7 +14,7 @@ setup(
 
     install_requires = ['vmw.ZSI',
                         'setuptools',
-                        'Twisted',
+                        'zope.interface',
                         ],
     extra_requires = {'async': 'Twisted'},
     setup_requires = ['unittest2',
