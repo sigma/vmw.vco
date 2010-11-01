@@ -31,6 +31,14 @@ class TestGetAllPlugins(TestCase):
                                 'display': 'Plop'}]}
         self._testPluginBase(_params)
 
+    def testEmptyPlugin(self):
+        _params = {'plugins': [{}]}
+        self._testPluginBase(_params)
+
+    def testNoPlugin(self):
+        _params = {}
+        self._testPluginBase(_params)
+
     def testIncompletePlugins(self):
         _params = {'plugins': [{'version': '0.1',
                                 'desc': 'plop plug-in',

@@ -25,6 +25,9 @@ class TestEcho(TestCase):
     def testEcho(self):
         self._testEchoBase("plop")
 
+    def testEchoEmpty(self):
+        self._testEchoBase("")
+
     def testEchoLong(self):
         self._testEchoBase("repeated pattern"*50)
 
