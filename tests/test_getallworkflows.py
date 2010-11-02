@@ -23,11 +23,25 @@ class TestGetAllWorkflows(TestCase):
         self.assertTrue(isinstance(wfs, list))
         for wf in wfs:
             self.assertTrue(isinstance(wf, Workflow))
+        return wfs
 
     def testNoWorkflow(self):
         _params = {'workflows': []}
         self._testWorkflowsBase(_params)
 
-    def testSingleWorkflow(self):
+    def testMinimalWorkflow(self):
         _params = {'workflows': [{'name': "Plop"}]}
         self._testWorkflowsBase(_params)
+
+    def testCompleteWorkflow(self):
+        _params = {'workflows': [{'name': "Plop",
+                                  'description': "dummy workflow",
+                                  'id': "12345-67890",
+                                  'input': [{'name': "in1",
+                                             'type': "type1"}],
+                                  'output': [{'name': "out1",
+                                              'type': "type1"}],
+                                  'attributes': [{'name': "attr1",
+                                                  'type': "type1"}]}]}
+        wfs = self._testWorkflowsBase(_params)
+        self.assertEquals(len(wfs), 1)

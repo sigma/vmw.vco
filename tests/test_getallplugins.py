@@ -23,6 +23,7 @@ class TestGetAllPlugins(TestCase):
         self.assertTrue(isinstance(plugs, list))
         for p in plugs:
             self.assertTrue(isinstance(p, Plugin))
+        return plugs
 
     def testBasicPlugin(self):
         _params = {'plugins': [{'name': 'plop',
