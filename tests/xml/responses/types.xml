@@ -1,0 +1,54 @@
+{% macro Plugin(p) %}
+  {% if p.name is defined %}
+    <moduleName>{{ p.name }}</moduleName>
+  {% endif %}
+  {% if p.version is defined %}
+    <moduleVersion>{{ p.version }}</moduleVersion>
+  {% endif %}
+  {% if p.desc is defined %}
+    <moduleDescription>{{ p.desc }}</moduleDescription>
+  {% endif %}
+  {% if p.display is defined %}
+    <moduleDisplayName>{{ p.display }}</moduleDisplayName>
+  {% endif %}
+{% endmacro %}
+
+{% macro Parameter(p) %}
+  {% if p.name is defined %}
+    <name>{{ p.name }}</name>
+  {% endif %}
+  {% if p.type is defined %}
+    <type>{{ p.type }}</type>
+  {% endif %}
+{% endmacro %}
+
+{% macro Parameters(params) %}
+  {% for p in params %}
+    {{ Parameter(p) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro Workflow(wf) %}
+  {% if wf.name is defined %}
+    <name>{{ wf.name }}</name>
+  {% endif %}
+  {% if wf.id is defined %}
+    <id>{{ wf.id }}</id>
+  {% endif %}
+  {% if wf.description is defined %}
+    <description>{{ wf.description }}</description>
+  {% endif %}
+  {% if wf.input is defined %}
+    <inParameters>{{ Parameters(wf.input) }}</inParameters>
+  {% endif %}
+  {% if wf.output is defined %}
+    <outParameters>{{ Parameters(wf.output) }}</outParameters>
+  {% endif %}
+  {% if wf.attributes is defined %}
+    <attributes>{{ Parameters(wf.attributes) }}</attributes>
+  {% endif %}
+{% endmacro %}
+
+{# Local Variables:         #}
+{# mode: django-html-mumamo #}
+{# End:                     #}

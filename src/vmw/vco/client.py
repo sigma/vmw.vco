@@ -451,6 +451,8 @@ class Workflow(object):
         self.attributes = self.__convertAttributes(holder._attributes)
 
     def __convertAttributes(self, attrs):
+        if attrs is None:
+            return []
         return [WorkflowAttribute(self._server, it) for it in attrs._item]
 
     def execute(self, inputs={}):

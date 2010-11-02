@@ -1,13 +1,13 @@
 {% import "types.xml" as types %}
 {% extends "base.xml" %}
 {% block body %}
-<vco:getAllPluginsResponse>
-  {% for p in plugins %}
-    <vco:getAllPluginsReturn>
-      {{ types.Plugin(p) }}
-    </vco:getAllPluginsReturn>
+<vco:getAllWorkflowsResponse>
+  {% for wf in workflows %}
+    <vco:getAllWorkflowsReturn>
+      {{ types.Workflow(wf) }}
+    </vco:getAllWorkflowsReturn>
   {% endfor %}
-</vco:getAllPluginsResponse>
+</vco:getAllWorkflowsResponse>
 {% endblock %}
 
 {# Local Variables:         #}
