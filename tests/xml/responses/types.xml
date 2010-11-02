@@ -1,51 +1,53 @@
 {% macro Plugin(p) %}
   {% if p.name is defined %}
-    <moduleName>{{ p.name }}</moduleName>
+    <vco:moduleName>{{ p.name }}</vco:moduleName>
   {% endif %}
   {% if p.version is defined %}
-    <moduleVersion>{{ p.version }}</moduleVersion>
+    <vco:moduleVersion>{{ p.version }}</vco:moduleVersion>
   {% endif %}
   {% if p.desc is defined %}
-    <moduleDescription>{{ p.desc }}</moduleDescription>
+    <vco:moduleDescription>{{ p.desc }}</vco:moduleDescription>
   {% endif %}
   {% if p.display is defined %}
-    <moduleDisplayName>{{ p.display }}</moduleDisplayName>
+    <vco:moduleDisplayName>{{ p.display }}</vco:moduleDisplayName>
   {% endif %}
 {% endmacro %}
 
 {% macro Parameter(p) %}
   {% if p.name is defined %}
-    <name>{{ p.name }}</name>
+    <vco:name>{{ p.name }}</vco:name>
   {% endif %}
   {% if p.type is defined %}
-    <type>{{ p.type }}</type>
+    <vco:type>{{ p.type }}</vco:type>
   {% endif %}
 {% endmacro %}
 
 {% macro Parameters(params) %}
   {% for p in params %}
-    {{ Parameter(p) }}
+    <vco:item>
+      {{ Parameter(p) }}
+    </vco:item>
   {% endfor %}
 {% endmacro %}
 
 {% macro Workflow(wf) %}
   {% if wf.name is defined %}
-    <name>{{ wf.name }}</name>
+    <vco:name>{{ wf.name }}</vco:name>
   {% endif %}
   {% if wf.id is defined %}
-    <id>{{ wf.id }}</id>
+    <vco:id>{{ wf.id }}</vco:id>
   {% endif %}
   {% if wf.description is defined %}
-    <description>{{ wf.description }}</description>
+    <vco:description>{{ wf.description }}</vco:description>
   {% endif %}
   {% if wf.input is defined %}
-    <inParameters>{{ Parameters(wf.input) }}</inParameters>
+    <vco:inParameters>{{ Parameters(wf.input) }}</vco:inParameters>
   {% endif %}
   {% if wf.output is defined %}
-    <outParameters>{{ Parameters(wf.output) }}</outParameters>
+    <vco:outParameters>{{ Parameters(wf.output) }}</vco:outParameters>
   {% endif %}
   {% if wf.attributes is defined %}
-    <attributes>{{ Parameters(wf.attributes) }}</attributes>
+    <vco:attributes>{{ Parameters(wf.attributes) }}</vco:attributes>
   {% endif %}
 {% endmacro %}
 
